@@ -15,16 +15,7 @@
 html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:var(--navy);color:var(--white);overflow-x:hidden}
 
-/* ── LANG SWITCH ── */
-.lang-btn{
-  display:flex;align-items:center;gap:6px;
-  background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.25);
-  border-radius:20px;padding:5px 14px;cursor:pointer;
-  font-size:.76rem;font-weight:700;letter-spacing:.1em;color:var(--mint);
-  transition:all .2s;user-select:none;
-}
-.lang-btn:hover{background:rgba(0,229,160,.2)}
-.lang-flag{font-size:1rem}
+/* (Language toggle removed — single-language site) */
 
 /* ── NAV ── */
 nav{
@@ -181,11 +172,13 @@ section{padding:100px 48px}
 #skills{background:var(--navy)}
 .skills-inner{max-width:1100px;margin:0 auto}
 .skills-header{text-align:center;margin-bottom:56px}
-.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.skills-grid{display:flex;flex-wrap:wrap;gap:22px;justify-content:center;align-items:stretch}
 .skill-card{
   background:var(--card);border:1px solid rgba(255,255,255,.06);
   border-radius:6px;padding:32px 26px;
   transition:border-color .3s,transform .3s;
+  flex: 1 1 calc(33.333% - 22px);
+  min-width: 250px;
 }
 .skill-card:hover{border-color:rgba(0,229,160,.35);transform:translateY(-4px)}
 .skill-icon{font-size:2rem;margin-bottom:18px;display:block}
@@ -219,8 +212,17 @@ section{padding:100px 48px}
 #pricing{background:var(--navy)}
 .pricing-inner{max-width:980px;margin:0 auto}
 .pricing-header{text-align:center;margin-bottom:52px}
-.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.pricing-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  justify-content:center;
+  gap:22px;
+  width:min(100%,980px);
+  margin:0 auto;
+}
 .price-card{
+  max-width:420px;
+  width:100%;
   background:var(--card);border:1px solid rgba(255,255,255,.07);
   border-radius:6px;padding:34px 26px;position:relative;
   transition:transform .3s;
@@ -269,6 +271,7 @@ section{padding:100px 48px}
   padding:13px 28px;border-radius:3px;text-decoration:none;
   font-weight:700;font-size:.86rem;letter-spacing:.08em;text-transform:uppercase;
   transition:background .2s,transform .2s;
+  animation:blink 1.5s infinite;
 }
 .zalo-btn:hover{background:#0055cc;transform:translateY(-2px)}
 .phone-btn{
@@ -277,6 +280,7 @@ section{padding:100px 48px}
   padding:13px 28px;border-radius:3px;text-decoration:none;
   font-weight:700;font-size:.86rem;letter-spacing:.08em;text-transform:uppercase;
   transition:all .2s;
+  animation:blink 1.5s infinite;
 }
 .phone-btn:hover{background:rgba(0,229,160,.08);transform:translateY(-2px)}
 
@@ -291,6 +295,13 @@ footer a{color:var(--mint);text-decoration:none}
 /* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes blink{
+  0%{opacity:1;transform:translateY(0)}
+  25%{opacity:1;transform:translateY(-8px)}
+  50%{opacity:.6;transform:translateY(0)}
+  75%{opacity:1;transform:translateY(-8px)}
+  100%{opacity:1;transform:translateY(0)}
+}
 @keyframes pulseCta{
   0%,100%{box-shadow:0 0 0 0 rgba(0,229,160,.35)}
   50%{box-shadow:0 0 0 14px rgba(0,229,160,0)}
@@ -329,17 +340,13 @@ footer a{color:var(--mint);text-decoration:none}
 <nav id="navbar">
   <a href="#hero" class="nav-logo">HUỲNH NHƯ ✦</a>
   <ul class="nav-links">
-    <li><a href="#about" data-vi="Về tôi" data-en="About">Về tôi</a></li>
-    <li><a href="#skills" data-vi="Chương trình" data-en="Program">Chương trình</a></li>
-    <li><a href="#testimonials" data-vi="Học viên" data-en="Students">Học viên</a></li>
-    <li><a href="#pricing" data-vi="Học phí" data-en="Pricing">Học phí</a></li>
+    <li><a href="#about">Về tôi</a></li>
+    <li><a href="#skills">Chương trình</a></li>
+    <li><a href="#testimonials">Học viên</a></li>
+    <li><a href="#pricing">Lộ trình học</a></li>
   </ul>
   <div class="nav-right">
-    <div class="lang-btn" id="langToggle" onclick="toggleLang()">
-      <span class="lang-flag" id="langFlag">🇻🇳</span>
-      <span id="langLabel">VI</span>
-    </div>
-    <a href="#contact" class="nav-cta" data-vi="Đăng ký" data-en="Sign Up">Đăng ký</a>
+    <a href="#contact" class="nav-cta">Đăng ký</a>
   </div>
 </nav>
 
@@ -358,19 +365,19 @@ footer a{color:var(--mint);text-decoration:none}
   <canvas id="three-canvas"></canvas>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow" data-vi="HLV Cầu Lông Chuyên Nghiệp · Đà Nẵng" data-en="Professional Badminton Coach · Da Nang">HLV Cầu Lông Chuyên Nghiệp · Đà Nẵng</p>
+    <p class="hero-eyebrow">HLV Cầu Lông · Đà Nẵng</p>
     <h1 class="hero-title" id="heroTitle">
-      <span data-vi="Đánh đúng." data-en="Play Right.">Đánh đúng.</span>
-      <em data-vi="Thắng đẹp." data-en="Win Beautifully.">Thắng đẹp.</em>
+      <span>Đánh đúng kỹ thuật.</span>
+      <em>Nâng cao sức khoẻ.</em>
     </h1>
-    <p class="hero-sub" data-vi="Hơn 7 năm kinh nghiệm — tôi giúp bạn xây nền kỹ thuật vững chắc, đánh bóng có tư duy, và yêu môn thể thao này theo cách hoàn toàn mới." data-en="Over 7 years of experience — I help you build solid technique, play with intention, and fall in love with this sport in a completely new way.">Hơn 7 năm kinh nghiệm — tôi giúp bạn xây nền kỹ thuật vững chắc, đánh bóng có tư duy, và yêu môn thể thao này theo cách hoàn toàn mới.</p>
+    <p class="hero-sub">Hơn 7 năm kinh nghiệm — tôi giúp bạn xây nền kỹ thuật vững chắc, đánh cầu có tư duy, và yêu môn thể thao này theo cách hoàn toàn mới.</p>
     <div class="hero-actions">
-      <a href="#contact" class="btn-primary" data-vi="Đăng ký học thử" data-en="Try a Free Class">Đăng ký học thử</a>
-      <a href="#about" class="btn-ghost" data-vi="Tìm hiểu thêm" data-en="Learn More">Tìm hiểu thêm</a>
+      <a href="#contact" class="btn-primary">Đăng ký học</a>
+      <a href="#about" class="btn-ghost">Tìm hiểu thêm</a>
     </div>
   </div>
   <div class="scroll-hint">
-    <span data-vi="Cuộn xuống" data-en="Scroll">Cuộn xuống</span>
+    <span>Cuộn xuống</span>
     <div class="scroll-line"></div>
   </div>
 </section>
@@ -379,22 +386,24 @@ footer a{color:var(--mint);text-decoration:none}
 <section id="about">
   <div class="about-inner">
     <div class="about-photo-wrap reveal">
-      <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80" alt="HLV Huỳnh Như"/>
+      <img src="./assets/image1.jpg" alt="HLV Huỳnh Như"/>
     </div>
     <div class="reveal">
-      <p class="section-tag" data-vi="Về tôi" data-en="About Me">Về tôi</p>
+      <p class="section-tag">Về tôi</p>
       <h2 class="section-title">
-        <span data-vi="Không chỉ dạy đánh —" data-en="Not just teaching swings —">Không chỉ dạy đánh —</span><br>
-        <em style="color:var(--mint);font-style:normal" data-vi="tôi dạy bạn hiểu bóng." data-en="I teach you to read the game.">tôi dạy bạn hiểu bóng.</em>
+        <span>Không chỉ dạy đánh —</span><br>
+        <em style="color:var(--mint);font-style:normal">tôi dạy bạn hiểu cầu.</em>
       </h2>
-      <p class="about-quote" data-vi='"Kỹ thuật tốt không đến từ luyện tập nhiều — mà từ luyện đúng."' data-en='"Good technique doesn't come from practicing more — it comes from practicing right."'>"Kỹ thuật tốt không đến từ luyện tập nhiều — mà từ luyện đúng."</p>
-      <p class="about-text" data-vi="Tôi là Phan Võ Huỳnh Như, HLV cầu lông với chứng chỉ Liên đoàn Cầu lông Việt Nam. Xuất phát từ vận động viên thi đấu cấp tỉnh, tôi hiểu từng lỗi kỹ thuật nhỏ ảnh hưởng thế nào đến trận đấu — và cách sửa nhanh nhất để học viên tiến bộ thật sự, không chỉ 'đánh được'." data-en="I'm Phan Vo Huynh Nhu, a certified badminton coach with credentials from the Vietnam Badminton Federation. Coming from a competitive provincial athlete background, I understand how small technical flaws impact a match — and the fastest way to help students make real progress, not just 'get by'.">Tôi là Phan Võ Huỳnh Như, HLV cầu lông với chứng chỉ Liên đoàn Cầu lông Việt Nam. Xuất phát từ vận động viên thi đấu cấp tỉnh, tôi hiểu từng lỗi kỹ thuật nhỏ ảnh hưởng thế nào đến trận đấu — và cách sửa nhanh nhất để học viên tiến bộ thật sự, không chỉ "đánh được".</p>
+      <p class="about-quote">"Kỹ thuật tốt không đến từ luyện tập nhiều — mà từ tập luyện đúng."</p>
+      <p class="about-text">Cử nhân Giáo dục Thể chất (Cầu lông chuyên sâu), ĐH Thể dục Thể thao Đà Nẵng & Thạc sĩ Giáo dục học. Từ kiến thức chính quy và thực tiễn, tôi hiểu rằng: mỗi lỗi kỹ thuật nhỏ – từ cách cầm vợt, di chuyển, bước chân – đều ảnh hưởng trực tiếp đến hiệu quả thi đấu và nguy cơ chấn thương. Tôi giúp bạn đánh đúng, đánh hay, đồng thời nâng cao sức khỏe một cách khoa học, an toàn.</p>
       <div class="about-chips">
-        <span class="chip" data-vi="Chứng chỉ VBF" data-en="VBF Certified">Chứng chỉ VBF</span>
-        <span class="chip" data-vi="7+ năm kinh nghiệm" data-en="7+ Years Exp.">7+ năm kinh nghiệm</span>
-        <span class="chip" data-vi="Cả 2 phái học" data-en="All Genders Welcome">Cả 2 phái học</span>
-        <span class="chip" data-vi="Lớp nhỏ ≤ 6 người" data-en="Max 6 per Class">Lớp nhỏ ≤ 6 người</span>
-        <span class="chip" data-vi="Đà Nẵng" data-en="Da Nang">Đà Nẵng</span>
+        <span class="chip">Cử nhân Đại học TDTT</span>
+        <span class="chip">Thạc sĩ Giáo dục học</span>
+        <span class="chip">Chuyên sâu cầu lông</span>
+        <span class="chip">7+ năm kinh nghiệm</span>
+        <span class="chip">Nam và Nữ</span>
+        <span class="chip">Dạy kèm ≤ 5 người</span>
+        <span class="chip">Đà Nẵng</span>
       </div>
     </div>
   </div>
@@ -404,39 +413,34 @@ footer a{color:var(--mint);text-decoration:none}
 <section id="skills">
   <div class="skills-inner">
     <div class="skills-header reveal">
-      <p class="section-tag" data-vi="Chương trình học" data-en="What You'll Learn">Chương trình học</p>
-      <h2 class="section-title" data-vi="Bạn sẽ học được gì?" data-en="What's in the program?">Bạn sẽ học được gì?</h2>
+      <p class="section-tag">Chương trình học</p>
+      <h2 class="section-title">Bạn sẽ học được gì?</h2>
     </div>
     <div class="skills-grid">
       <div class="skill-card reveal">
         <span class="skill-icon">🏸</span>
-        <h3 data-vi="Kỹ thuật cơ bản" data-en="Core Technique">Kỹ thuật cơ bản</h3>
-        <p data-vi="Cách cầm vợt, di chuyển chân, các cú đánh nền tảng (clear, drop, smash, net) được xây từ gốc — đúng tư thế từ ngày đầu." data-en="Grip, footwork, and all foundational strokes (clear, drop, smash, net) built from the ground up — correct form from day one.">Cách cầm vợt, di chuyển chân, các cú đánh nền tảng được xây từ gốc — đúng tư thế từ ngày đầu.</p>
+        <h3>Kỹ thuật cơ bản</h3>
+        <p>Cách cầm vợt, di chuyển chân, các cú đánh nền tảng được xây từ gốc — đúng tư thế từ ngày đầu.</p>
       </div>
       <div class="skill-card reveal">
         <span class="skill-icon">🧠</span>
-        <h3 data-vi="Chiến thuật thi đấu" data-en="Match Tactics">Chiến thuật thi đấu</h3>
-        <p data-vi="Đọc bóng, kiểm soát nhịp trận, tấn công–thủ, tâm lý thi đấu và cách xây dựng điểm số có chủ đích." data-en="Reading the shuttle, controlling rally tempo, attack–defense balance, mental composure, and building points with purpose.">Đọc bóng, kiểm soát nhịp trận, tâm lý thi đấu và cách xây dựng điểm số có chủ đích.</p>
+        <h3>Chiến thuật thi đấu</h3>
+        <p>Đọc cầu, kiểm soát nhịp trận, tâm lý thi đấu và cách xây dựng điểm số có chủ đích.</p>
       </div>
       <div class="skill-card reveal">
         <span class="skill-icon">⚡</span>
-        <h3 data-vi="Thể lực & Phong trào" data-en="Fitness & Movement">Thể lực & Phong trào</h3>
-        <p data-vi="Bài tập thể lực chuyên biệt cho cầu lông: tốc độ phản xạ, sức bền sân, linh hoạt — kết hợp vui, không nhàm chán." data-en="Badminton-specific conditioning: reaction speed, court endurance, flexibility — fun drills, never boring.">Bài tập thể lực chuyên biệt: tốc độ phản xạ, sức bền sân, linh hoạt — kết hợp vui, không nhàm chán.</p>
+        <h3>Thể lực & Phong trào</h3>
+        <p>Bài tập thể lực chuyên biệt: tốc độ phản xạ, sức bền sân, linh hoạt — kết hợp vui, không nhàm chán.</p>
       </div>
       <div class="skill-card reveal">
         <span class="skill-icon">🎯</span>
-        <h3 data-vi="Video phân tích" data-en="Video Analysis">Video phân tích</h3>
-        <p data-vi="Quay lại và phân tích từng buổi tập. Bạn thấy đúng lỗi mình mắc — tiến bộ nhanh gấp đôi." data-en="Recording and reviewing each session. You see your exact mistakes — progress twice as fast.">Quay lại và phân tích từng buổi tập. Bạn thấy đúng lỗi mình mắc — tiến bộ nhanh gấp đôi.</p>
+        <h3>Video phân tích</h3>
+        <p>Quay lại và phân tích từng buổi tập. Bạn thấy đúng lỗi mình mắc — tiến bộ nhanh gấp đôi.</p>
       </div>
       <div class="skill-card reveal">
         <span class="skill-icon">🤝</span>
-        <h3 data-vi="Đấu tập & giao lưu" data-en="Sparring & Community">Đấu tập & giao lưu</h3>
-        <p data-vi="Cộng đồng học viên tích cực. Tổ chức đấu giao lưu nội bộ hàng tháng để thực chiến kỹ năng." data-en="An active student community. Monthly internal friendly matches to put skills into real practice.">Cộng đồng học viên tích cực. Tổ chức đấu giao lưu nội bộ hàng tháng để thực chiến kỹ năng.</p>
-      </div>
-      <div class="skill-card reveal">
-        <span class="skill-icon">📱</span>
-        <h3 data-vi="Hỗ trợ ngoài sân" data-en="Off-Court Support">Hỗ trợ ngoài sân</h3>
-        <p data-vi="Group Zalo riêng mỗi lớp, clip bài tập bổ sung, giải đáp thắc mắc kỹ thuật — tôi đồng hành cả khi bạn tự tập." data-en="Private class group chat, supplementary drill clips, technique Q&amp;A — I'm with you even when you train solo.">Group Zalo riêng mỗi lớp, clip bài tập bổ sung, giải đáp kỹ thuật — tôi đồng hành cả khi bạn tự tập.</p>
+        <h3>Đấu tập & giao lưu</h3>
+        <p>Cộng đồng học viên tích cực. Tổ chức đấu giao lưu nội bộ hàng tháng để thực chiến kỹ năng.</p>
       </div>
     </div>
   </div>
@@ -446,40 +450,40 @@ footer a{color:var(--mint);text-decoration:none}
 <section id="testimonials">
   <div class="test-inner">
     <div class="test-header reveal">
-      <p class="section-tag" data-vi="Học viên nói gì" data-en="What Students Say">Học viên nói gì</p>
-      <h2 class="section-title" data-vi="Kết quả thật từ người thật" data-en="Real Results from Real People">Kết quả thật từ người thật</h2>
+      <p class="section-tag">Học viên nói gì</p>
+      <h2 class="section-title">Kết quả thật từ người thật</h2>
     </div>
     <div class="test-grid">
       <div class="test-card reveal">
         <div class="test-stars">★★★★★</div>
-        <p class="test-text" data-vi='"Trước tôi đánh 2 năm mà vẫn sai hết. Học với chị Như 2 tháng, kỹ thuật thay đổi hoàn toàn. Bạn bè cứ hỏi tôi học ở đâu vậy!"' data-en='"I played for 2 years with all the wrong habits. After 2 months with Coach Nhu, my technique completely transformed. Friends keep asking where I train!"'>"Trước tôi đánh 2 năm mà vẫn sai hết. Học với chị Như 2 tháng, kỹ thuật thay đổi hoàn toàn. Bạn bè cứ hỏi tôi học ở đâu vậy!"</p>
+        <p class="test-text">"Lúc trước tự chơi cũng được gần 1 năm, kiểu đánh kh đúng kỹ thuật nên trình cứ dậm tại chỗ. Từ khi học ở đây cảm giác đánh đúng kỹ thuâht đường cầu nét hơn nhẹ nhàng khi phát lực mà toàn cuối sân."</p>
         <div class="test-author">
           <div class="test-avatar">MT</div>
           <div>
             <div class="test-name">Minh Tuấn</div>
-            <div class="test-role" data-vi="Nhân viên văn phòng · 28 tuổi" data-en="Office Worker · Age 28">Nhân viên văn phòng · 28 tuổi</div>
+            <div class="test-role">Nhân viên văn phòng</div>
           </div>
         </div>
       </div>
       <div class="test-card reveal">
         <div class="test-stars">★★★★★</div>
-        <p class="test-text" data-vi='"Chị dạy rất tỉ mỉ, kiên nhẫn. Tôi là nữ mới học, chưa bao giờ bị mặc cảm hay bị dạy qua loa. Cảm giác được đầu tư thật sự."' data-en='"She teaches meticulously and patiently. As a female beginner I never felt dismissed or rushed. The attention to each student is genuinely impressive."'>"Chị dạy rất tỉ mỉ, kiên nhẫn. Tôi là nữ mới học, chưa bao giờ bị mặc cảm hay bị dạy qua loa. Cảm giác được đầu tư thật sự."</p>
+        <p class="test-text">"Xưa cứ nghĩ nhìn video là chơi được, mà thật sự học vô mới biết nên học từ sớm hơn để nhanh lên trình hạn chế chấn thương á."</p>
         <div class="test-author">
           <div class="test-avatar">PA</div>
           <div>
             <div class="test-name">Phương Anh</div>
-            <div class="test-role" data-vi="Sinh viên · 21 tuổi" data-en="University Student · Age 21">Sinh viên · 21 tuổi</div>
+            <div class="test-role">Sinh viên</div>
           </div>
         </div>
       </div>
       <div class="test-card reveal">
         <div class="test-stars">★★★★★</div>
-        <p class="test-text" data-vi='"Con trai tôi 12 tuổi học được 3 tháng, bây giờ đánh với người lớn cũng không còn sợ. Cách chị Như dạy trẻ con rất hiệu quả và vui."' data-en='"My 12-year-old son trained for 3 months — he now confidently plays against adults. Coach Nhu has a wonderful way of teaching kids that's both effective and fun."'>"Con trai tôi 12 tuổi học được 3 tháng, bây giờ đánh với người lớn không còn sợ nữa. Cách chị Như dạy trẻ con rất hiệu quả và vui."</p>
+        <p class="test-text">"Cô dạy có tâm, tận tình chỉnh sửa từng động tác sai. 10 điểm."</p>
         <div class="test-author">
           <div class="test-avatar">TH</div>
           <div>
             <div class="test-name">Thanh Hoa</div>
-            <div class="test-role" data-vi="Phụ huynh học viên nhỏ tuổi" data-en="Parent of Young Student">Phụ huynh học viên nhỏ tuổi</div>
+            <div class="test-role">Phụ huynh học viên nhỏ tuổi</div>
           </div>
         </div>
       </div>
@@ -491,50 +495,30 @@ footer a{color:var(--mint);text-decoration:none}
 <section id="pricing">
   <div class="pricing-inner">
     <div class="pricing-header reveal">
-      <p class="section-tag" data-vi="Học phí" data-en="Pricing">Học phí</p>
-      <h2 class="section-title" data-vi="Chọn lộ trình phù hợp" data-en="Choose Your Path">Chọn lộ trình phù hợp</h2>
+      <p class="section-tag">Học phí</p>
+      <h2 class="section-title">Chọn lộ trình phù hợp</h2>
     </div>
     <div class="pricing-grid">
-      <div class="price-card reveal">
-        <p class="price-tier" data-vi="Nhóm nhỏ" data-en="Small Group">Nhóm nhỏ</p>
-        <h3 class="price-name" data-vi="Cơ Bản" data-en="Foundation">Cơ Bản</h3>
-        <div class="price-amount">500k</div>
-        <p class="price-unit" data-vi="/ tháng · 8 buổi · ~4–6 người" data-en="/ month · 8 sessions · 4–6 people">/ tháng · 8 buổi · ~4–6 người</p>
-        <ul class="price-features">
-          <li data-vi="Kỹ thuật nền tảng" data-en="Foundational technique">Kỹ thuật nền tảng</li>
-          <li data-vi="Di chuyển & footwork" data-en="Movement & footwork">Di chuyển & footwork</li>
-          <li data-vi="Group Zalo hỗ trợ" data-en="Zalo group support">Group Zalo hỗ trợ</li>
-          <li data-vi="Lịch linh hoạt" data-en="Flexible schedule">Lịch linh hoạt</li>
-        </ul>
-        <a href="#contact" class="price-btn price-btn-outline" data-vi="Đăng ký ngay" data-en="Sign Up Now">Đăng ký ngay</a>
-      </div>
       <div class="price-card featured reveal">
-        <div class="price-badge" data-vi="Phổ biến nhất" data-en="Most Popular">Phổ biến nhất</div>
-        <p class="price-tier" data-vi="Nhóm nhỏ" data-en="Small Group">Nhóm nhỏ</p>
-        <h3 class="price-name" data-vi="Nâng Cao" data-en="Advanced">Nâng Cao</h3>
-        <div class="price-amount">750k</div>
-        <p class="price-unit" data-vi="/ tháng · 8 buổi · ~4–6 người" data-en="/ month · 8 sessions · 4–6 people">/ tháng · 8 buổi · ~4–6 người</p>
+        <div class="price-badge">Phổ biến nhất</div>
+        <h3 class="price-name">Cơ bản</h3>
         <ul class="price-features">
-          <li data-vi="Toàn bộ gói Cơ Bản" data-en="Everything in Foundation">Toàn bộ gói Cơ Bản</li>
-          <li data-vi="Chiến thuật & thực chiến" data-en="Tactics & live sparring">Chiến thuật & thực chiến</li>
-          <li data-vi="Phân tích video buổi tập" data-en="Session video analysis">Phân tích video buổi tập</li>
-          <li data-vi="Đấu giao lưu hàng tháng" data-en="Monthly friendly matches">Đấu giao lưu hàng tháng</li>
-          <li data-vi="Clip bài tập tự luyện" data-en="Self-practice drill clips">Clip bài tập tự luyện</li>
+          <li>Toàn bộ kỹ thuật Cơ Bản</li>
+          <li>Chiến thuật & thực chiến</li>
+          <li>Phân tích video buổi tập</li>
+          <li>Đấu giao lưu hàng tháng</li>
         </ul>
-        <a href="#contact" class="price-btn price-btn-solid" data-vi="Đăng ký ngay" data-en="Sign Up Now">Đăng ký ngay</a>
+        <a href="#contact" class="price-btn price-btn-solid">Đăng ký ngay</a>
       </div>
       <div class="price-card reveal">
-        <p class="price-tier" data-vi="Cá nhân" data-en="Private">Cá nhân</p>
-        <h3 class="price-name" data-vi="1 — 1" data-en="1 — 1">1 — 1</h3>
-        <div class="price-amount">300k</div>
-        <p class="price-unit" data-vi="/ buổi · lịch theo yêu cầu" data-en="/ session · flexible schedule">/ buổi · lịch theo yêu cầu</p>
+        <h3 class="price-name">Nâng cao</h3>
         <ul class="price-features">
-          <li data-vi="Hoàn toàn cá nhân hóa" data-en="Fully personalized">Hoàn toàn cá nhân hóa</li>
-          <li data-vi="Sửa lỗi chuyên sâu" data-en="Deep technique correction">Sửa lỗi chuyên sâu</li>
-          <li data-vi="Chương trình riêng biệt" data-en="Custom program">Chương trình riêng biệt</li>
-          <li data-vi="Phù hợp chuẩn bị thi đấu" data-en="Ideal for competition prep">Phù hợp chuẩn bị thi đấu</li>
+          <li>Kỹ thuật nâng cao</li>
+          <li>Sửa lỗi chuyên sâu</li>
+          <li>Chương trình riêng biệt</li>
+          <li>Phù hợp chuẩn bị thi đấu</li>
         </ul>
-        <a href="#contact" class="price-btn price-btn-outline" data-vi="Liên hệ tư vấn" data-en="Get in Touch">Liên hệ tư vấn</a>
+        <a href="#contact" class="price-btn price-btn-solid">Đăng ký ngay</a>
       </div>
     </div>
   </div>
@@ -543,20 +527,20 @@ footer a{color:var(--mint);text-decoration:none}
 <!-- CONTACT -->
 <section id="contact">
   <div class="contact-inner">
-    <p class="section-tag reveal" style="text-align:center" data-vi="Bắt đầu ngay hôm nay" data-en="Start Today">Bắt đầu ngay hôm nay</p>
+    <p class="section-tag reveal" style="text-align:center">Bắt đầu ngay hôm nay</p>
     <h2 class="contact-title reveal">
-      <span data-vi="Sẵn sàng" data-en="Ready to">Sẵn sàng</span>
-      <span style="color:var(--mint)" data-vi=" lên sân" data-en=" hit the court"> lên sân</span>
-      <span data-vi=" chưa?" data-en=" yet?"> chưa?</span>
+      <span>Sẵn sàng</span>
+      <span style="color:var(--mint)"> lên sân</span>
+      <span> chưa?</span>
     </h2>
-    <p class="contact-sub reveal" data-vi="Buổi học thử miễn phí — không cam kết, không áp lực. Chỉ cần bạn mang vợt và tinh thần sẵn sàng thử thách bản thân." data-en="A free trial class — no commitment, no pressure. Just bring your racket and the spirit to challenge yourself.">Buổi học thử miễn phí — không cam kết, không áp lực. Chỉ cần bạn mang vợt và tinh thần sẵn sàng thử thách bản thân.</p>
+    <p class="contact-sub reveal">Chỉ cần bạn mang vợt và tinh thần sẵn sàng thử thách bản thân.</p>
     <div class="contact-btns reveal">
-      <a href="https://zalo.me/0912345678" target="_blank" class="zalo-btn">
+      <a href="https://zalo.me/0918887581" target="_blank" class="zalo-btn">
         <svg width="20" height="20" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="8" fill="#fff"/><text y="28" x="5" font-size="22" font-weight="bold" fill="#0068FF">Z</text></svg>
-        <span data-vi="Nhắn Zalo ngay" data-en="Message on Zalo">Nhắn Zalo ngay</span>
+        <span>Nhắn Zalo ngay</span>
       </a>
-      <a href="tel:+84912345678" class="phone-btn">
-        📞 0912 345 678
+      <a href="tel:+84918887581" class="phone-btn">
+        📞 0918887581
       </a>
     </div>
   </div>
@@ -564,12 +548,10 @@ footer a{color:var(--mint);text-decoration:none}
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2024 Phan Võ Huỳnh Như — <span data-vi="HLV Cầu Lông · Đà Nẵng" data-en="Badminton Coach · Da Nang">HLV Cầu Lông · Đà Nẵng</span></p>
+  <p></p>
   <p>
-    <span data-vi="Thiết kế bởi" data-en="Designed by">Thiết kế bởi</span>
-    <a href="https://fb.com/xuannam1004" target="_blank"> Xuân Nam</a>
-    &nbsp;·&nbsp;
-    <a href="#hero" data-vi="Lên đầu ↑" data-en="Back to top ↑">Lên đầu ↑</a>
+    <span></span>
+    <a href="#hero">Lên đầu trang ↑</a>
   </p>
 </footer>
 
@@ -849,32 +831,6 @@ footer a{color:var(--mint);text-decoration:none}
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 })();
-
-// ═══════════════════════════════════════════
-//  LANGUAGE TOGGLE
-// ═══════════════════════════════════════════
-let currentLang = 'vi';
-
-function toggleLang() {
-  currentLang = currentLang === 'vi' ? 'vi' : 'en';
-  const flag = document.getElementById('langFlag');
-  const label = document.getElementById('langLabel');
-  flag.textContent = currentLang === 'vi' ? '🇻🇳' : '🇬🇧';
-  label.textContent = currentLang === 'vi' ? 'VI' : 'EN';
-
-  document.querySelectorAll('[data-vi]').forEach(el => {
-    const val = el.getAttribute('data-' + currentLang);
-    if (val !== null) {
-      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-        el.placeholder = val;
-      } else {
-        el.textContent = val;
-      }
-    }
-  });
-
-  document.documentElement.lang = currentLang;
-}
 
 // ═══════════════════════════════════════════
 //  NAV SCROLL
