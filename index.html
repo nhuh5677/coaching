@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phan Võ Huỳnh Như — HLV Cầu Lông</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0B1624;--navy2:#131F30;--mint:#00E5A0;--mint2:#00C882;
+  --white:#FFFFFF;--silver:#8FA8C0;--silver2:#C8D6E5;--card:#111E2E;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--navy);color:var(--white);overflow-x:hidden}
+
+/* ── LANG SWITCH ── */
+.lang-btn{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.25);
+  border-radius:20px;padding:5px 14px;cursor:pointer;
+  font-size:.76rem;font-weight:700;letter-spacing:.1em;color:var(--mint);
+  transition:all .2s;user-select:none;
+}
+.lang-btn:hover{background:rgba(0,229,160,.2)}
+.lang-flag{font-size:1rem}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:20px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .4s,backdrop-filter .4s,padding .3s;
+}
+nav.scrolled{
+  background:rgba(11,22,36,.9);backdrop-filter:blur(16px);
+  padding:14px 48px;border-bottom:1px solid rgba(0,229,160,.1);
+}
+.nav-logo{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:1.2rem;font-weight:800;letter-spacing:.08em;
+  color:var(--mint);text-decoration:none;
+}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{
+  font-size:.78rem;font-weight:500;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--silver2);text-decoration:none;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--mint)}
+.nav-right{display:flex;align-items:center;gap:14px}
+.nav-cta{
+  background:var(--mint);color:var(--navy);
+  padding:9px 22px;border-radius:3px;
+  font-size:.78rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;text-decoration:none;
+  transition:background .2s,transform .2s;
+}
+.nav-cta:hover{background:var(--mint2);transform:translateY(-1px)}
+
+/* ── SIDE DOTS ── */
+#side-dots{
+  position:fixed;right:22px;top:50%;transform:translateY(-50%);
+  z-index:99;display:flex;flex-direction:column;gap:10px;
+}
+.dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--silver);cursor:pointer;
+  transition:background .3s,transform .3s;
+}
+.dot.active{background:var(--mint);transform:scale(1.5)}
+
+/* ── HERO ── */
+#hero{
+  height:100vh;position:relative;overflow:hidden;
+  display:flex;align-items:center;
+}
+#three-canvas{
+  position:absolute;inset:0;z-index:0;
+}
+.hero-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:radial-gradient(ellipse 60% 80% at 30% 50%,rgba(11,22,36,.85) 0%,rgba(11,22,36,.4) 100%);
+}
+.hero-content{
+  position:relative;z-index:2;padding:0 48px;
+  max-width:640px;
+}
+.hero-eyebrow{
+  font-size:.74rem;font-weight:700;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--mint);
+  margin-bottom:18px;opacity:0;animation:fadeUp .7s .2s forwards;
+}
+.hero-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(3.2rem,8vw,6.5rem);
+  font-weight:800;line-height:.95;letter-spacing:-.01em;
+  opacity:0;animation:fadeUp .7s .4s forwards;
+}
+.hero-title em{font-style:normal;color:var(--mint);display:block}
+.hero-sub{
+  margin-top:22px;font-size:1rem;font-weight:300;
+  color:var(--silver2);line-height:1.7;max-width:420px;
+  opacity:0;animation:fadeUp .7s .6s forwards;
+}
+.hero-actions{
+  margin-top:36px;display:flex;gap:16px;align-items:center;
+  opacity:0;animation:fadeUp .7s .8s forwards;
+}
+.btn-primary{
+  background:var(--mint);color:var(--navy);
+  padding:14px 32px;border-radius:3px;font-weight:700;
+  font-size:.88rem;letter-spacing:.08em;text-transform:uppercase;
+  text-decoration:none;transition:background .2s,transform .2s;
+  animation:pulseCta 2.5s 1.5s infinite;
+}
+.btn-primary:hover{background:var(--mint2);transform:translateY(-2px)}
+.btn-ghost{
+  color:var(--silver2);font-size:.86rem;font-weight:500;
+  text-decoration:none;display:flex;align-items:center;gap:7px;
+  transition:color .2s;
+}
+.btn-ghost:hover{color:var(--mint)}
+.btn-ghost::after{content:'→'}
+
+.scroll-hint{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:0;animation:fadeIn .7s 1.4s forwards;
+}
+.scroll-hint span{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--silver)}
+.scroll-line{
+  width:1px;height:40px;
+  background:linear-gradient(to bottom,var(--mint),transparent);
+  animation:scrollDrop 1.6s 1.4s infinite;
+}
+
+/* ── SECTIONS ── */
+section{padding:100px 48px}
+.section-tag{font-size:.7rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--mint);margin-bottom:12px}
+.section-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;
+  line-height:1;letter-spacing:-.01em;margin-bottom:22px;
+}
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:none}
+
+/* ── ABOUT ── */
+#about{background:var(--navy2)}
+.about-inner{
+  max-width:1100px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;
+}
+.about-photo-wrap{position:relative}
+.about-photo-wrap::before{
+  content:'';position:absolute;top:-14px;left:-14px;
+  width:100%;height:100%;
+  border:2px solid var(--mint);border-radius:4px;opacity:.3;z-index:0;
+}
+.about-photo-wrap img{
+  width:100%;border-radius:4px;position:relative;z-index:1;
+  filter:grayscale(15%) contrast(1.05);
+}
+.about-quote{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:1.6rem;font-weight:600;line-height:1.4;
+  color:var(--silver2);margin-bottom:24px;
+  border-left:3px solid var(--mint);padding-left:18px;
+}
+.about-text{font-size:.93rem;color:var(--silver);line-height:1.8;margin-bottom:32px}
+.about-chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip{
+  border:1px solid rgba(0,229,160,.3);color:var(--mint);
+  padding:5px 14px;border-radius:20px;font-size:.75rem;
+  font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+}
+
+/* ── SKILLS ── */
+#skills{background:var(--navy)}
+.skills-inner{max-width:1100px;margin:0 auto}
+.skills-header{text-align:center;margin-bottom:56px}
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.skill-card{
+  background:var(--card);border:1px solid rgba(255,255,255,.06);
+  border-radius:6px;padding:32px 26px;
+  transition:border-color .3s,transform .3s;
+}
+.skill-card:hover{border-color:rgba(0,229,160,.35);transform:translateY(-4px)}
+.skill-icon{font-size:2rem;margin-bottom:18px;display:block}
+.skill-card h3{font-family:'Barlow Condensed',sans-serif;font-size:1.35rem;font-weight:700;margin-bottom:10px}
+.skill-card p{font-size:.86rem;color:var(--silver);line-height:1.7}
+
+/* ── TESTIMONIALS ── */
+#testimonials{background:var(--navy2)}
+.test-inner{max-width:1100px;margin:0 auto}
+.test-header{text-align:center;margin-bottom:52px}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.test-card{
+  background:var(--navy);border:1px solid rgba(255,255,255,.06);
+  border-radius:6px;padding:30px 24px;
+  display:flex;flex-direction:column;gap:18px;
+}
+.test-stars{color:var(--mint);font-size:.95rem;letter-spacing:2px}
+.test-text{font-size:.88rem;color:var(--silver2);line-height:1.75;font-style:italic}
+.test-author{display:flex;align-items:center;gap:13px}
+.test-avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,var(--mint),#006644);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;
+  color:var(--navy);flex-shrink:0;
+}
+.test-name{font-weight:600;font-size:.86rem}
+.test-role{font-size:.75rem;color:var(--silver)}
+
+/* ── PRICING ── */
+#pricing{background:var(--navy)}
+.pricing-inner{max-width:980px;margin:0 auto}
+.pricing-header{text-align:center;margin-bottom:52px}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.price-card{
+  background:var(--card);border:1px solid rgba(255,255,255,.07);
+  border-radius:6px;padding:34px 26px;position:relative;
+  transition:transform .3s;
+}
+.price-card:hover{transform:translateY(-4px)}
+.price-card.featured{
+  border-color:var(--mint);
+  background:linear-gradient(160deg,rgba(0,229,160,.08) 0%,var(--card) 60%);
+}
+.price-badge{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--mint);color:var(--navy);
+  font-size:.68rem;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;padding:4px 14px;border-radius:20px;white-space:nowrap;
+}
+.price-tier{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--silver);margin-bottom:10px}
+.price-name{font-family:'Barlow Condensed',sans-serif;font-size:1.55rem;font-weight:800;margin-bottom:8px}
+.price-amount{font-family:'Barlow Condensed',sans-serif;font-size:2.7rem;font-weight:800;color:var(--mint);line-height:1;margin-bottom:4px}
+.price-unit{font-size:.76rem;color:var(--silver);margin-bottom:26px}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:28px}
+.price-features li{font-size:.84rem;color:var(--silver2);display:flex;align-items:center;gap:9px}
+.price-features li::before{content:'✓';color:var(--mint);font-weight:700;flex-shrink:0}
+.price-btn{
+  display:block;text-align:center;padding:11px;
+  border-radius:3px;font-size:.82rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;text-decoration:none;transition:all .2s;
+}
+.price-btn-outline{border:1px solid rgba(0,229,160,.4);color:var(--mint)}
+.price-btn-outline:hover{background:rgba(0,229,160,.08)}
+.price-btn-solid{background:var(--mint);color:var(--navy)}
+.price-btn-solid:hover{background:var(--mint2)}
+
+/* ── CONTACT ── */
+#contact{background:var(--navy2);text-align:center;padding:100px 48px}
+.contact-inner{max-width:620px;margin:0 auto}
+.contact-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(2.6rem,6vw,4.2rem);font-weight:800;line-height:1.05;margin-bottom:18px;
+}
+.contact-title span{color:var(--mint)}
+.contact-sub{font-size:.95rem;color:var(--silver);line-height:1.7;margin-bottom:40px}
+.contact-btns{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.zalo-btn{
+  display:flex;align-items:center;gap:9px;
+  background:#0068FF;color:#fff;
+  padding:13px 28px;border-radius:3px;text-decoration:none;
+  font-weight:700;font-size:.86rem;letter-spacing:.08em;text-transform:uppercase;
+  transition:background .2s,transform .2s;
+}
+.zalo-btn:hover{background:#0055cc;transform:translateY(-2px)}
+.phone-btn{
+  display:flex;align-items:center;gap:9px;
+  border:1px solid rgba(0,229,160,.4);color:var(--mint);
+  padding:13px 28px;border-radius:3px;text-decoration:none;
+  font-weight:700;font-size:.86rem;letter-spacing:.08em;text-transform:uppercase;
+  transition:all .2s;
+}
+.phone-btn:hover{background:rgba(0,229,160,.08);transform:translateY(-2px)}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--navy);border-top:1px solid rgba(255,255,255,.06);
+  padding:26px 48px;display:flex;justify-content:space-between;align-items:center;
+}
+footer p{font-size:.76rem;color:var(--silver)}
+footer a{color:var(--mint);text-decoration:none}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulseCta{
+  0%,100%{box-shadow:0 0 0 0 rgba(0,229,160,.35)}
+  50%{box-shadow:0 0 0 14px rgba(0,229,160,0)}
+}
+@keyframes scrollDrop{
+  0%{transform:scaleY(0);transform-origin:top;opacity:1}
+  50%{transform:scaleY(1);transform-origin:top;opacity:1}
+  51%{transform:scaleY(1);transform-origin:bottom}
+  100%{transform:scaleY(0);transform-origin:bottom;opacity:0}
+}
+
+/* ── MOBILE ── */
+@media(max-width:900px){
+  nav{padding:14px 20px}
+  nav.scrolled{padding:10px 20px}
+  .nav-links{display:none}
+  section{padding:68px 22px}
+  #hero{padding:0}
+  .hero-content{padding:0 24px}
+  .about-inner{grid-template-columns:1fr;gap:36px}
+  .skills-grid{grid-template-columns:1fr}
+  .test-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr}
+  footer{flex-direction:column;gap:8px;text-align:center}
+  #side-dots{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">HUỲNH NHƯ ✦</a>
+  <ul class="nav-links">
+    <li><a href="#about" data-vi="Về tôi" data-en="About">Về tôi</a></li>
+    <li><a href="#skills" data-vi="Chương trình" data-en="Program">Chương trình</a></li>
+    <li><a href="#testimonials" data-vi="Học viên" data-en="Students">Học viên</a></li>
+    <li><a href="#pricing" data-vi="Học phí" data-en="Pricing">Học phí</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-btn" id="langToggle" onclick="toggleLang()">
+      <span class="lang-flag" id="langFlag">🇻🇳</span>
+      <span id="langLabel">VI</span>
+    </div>
+    <a href="#contact" class="nav-cta" data-vi="Đăng ký" data-en="Sign Up">Đăng ký</a>
+  </div>
+</nav>
+
+<!-- SIDE DOTS -->
+<div id="side-dots">
+  <div class="dot active" data-target="hero"></div>
+  <div class="dot" data-target="about"></div>
+  <div class="dot" data-target="skills"></div>
+  <div class="dot" data-target="testimonials"></div>
+  <div class="dot" data-target="pricing"></div>
+  <div class="dot" data-target="contact"></div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="three-canvas"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow" data-vi="HLV Cầu Lông Chuyên Nghiệp · Đà Nẵng" data-en="Professional Badminton Coach · Da Nang">HLV Cầu Lông Chuyên Nghiệp · Đà Nẵng</p>
+    <h1 class="hero-title" id="heroTitle">
+      <span data-vi="Đánh đúng." data-en="Play Right.">Đánh đúng.</span>
+      <em data-vi="Thắng đẹp." data-en="Win Beautifully.">Thắng đẹp.</em>
+    </h1>
+    <p class="hero-sub" data-vi="Hơn 7 năm kinh nghiệm — tôi giúp bạn xây nền kỹ thuật vững chắc, đánh bóng có tư duy, và yêu môn thể thao này theo cách hoàn toàn mới." data-en="Over 7 years of experience — I help you build solid technique, play with intention, and fall in love with this sport in a completely new way.">Hơn 7 năm kinh nghiệm — tôi giúp bạn xây nền kỹ thuật vững chắc, đánh bóng có tư duy, và yêu môn thể thao này theo cách hoàn toàn mới.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary" data-vi="Đăng ký học thử" data-en="Try a Free Class">Đăng ký học thử</a>
+      <a href="#about" class="btn-ghost" data-vi="Tìm hiểu thêm" data-en="Learn More">Tìm hiểu thêm</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span data-vi="Cuộn xuống" data-en="Scroll">Cuộn xuống</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-photo-wrap reveal">
+      <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80" alt="HLV Huỳnh Như"/>
+    </div>
+    <div class="reveal">
+      <p class="section-tag" data-vi="Về tôi" data-en="About Me">Về tôi</p>
+      <h2 class="section-title">
+        <span data-vi="Không chỉ dạy đánh —" data-en="Not just teaching swings —">Không chỉ dạy đánh —</span><br>
+        <em style="color:var(--mint);font-style:normal" data-vi="tôi dạy bạn hiểu bóng." data-en="I teach you to read the game.">tôi dạy bạn hiểu bóng.</em>
+      </h2>
+      <p class="about-quote" data-vi='"Kỹ thuật tốt không đến từ luyện tập nhiều — mà từ luyện đúng."' data-en='"Good technique doesn't come from practicing more — it comes from practicing right."'>"Kỹ thuật tốt không đến từ luyện tập nhiều — mà từ luyện đúng."</p>
+      <p class="about-text" data-vi="Tôi là Phan Võ Huỳnh Như, HLV cầu lông với chứng chỉ Liên đoàn Cầu lông Việt Nam. Xuất phát từ vận động viên thi đấu cấp tỉnh, tôi hiểu từng lỗi kỹ thuật nhỏ ảnh hưởng thế nào đến trận đấu — và cách sửa nhanh nhất để học viên tiến bộ thật sự, không chỉ 'đánh được'." data-en="I'm Phan Vo Huynh Nhu, a certified badminton coach with credentials from the Vietnam Badminton Federation. Coming from a competitive provincial athlete background, I understand how small technical flaws impact a match — and the fastest way to help students make real progress, not just 'get by'.">Tôi là Phan Võ Huỳnh Như, HLV cầu lông với chứng chỉ Liên đoàn Cầu lông Việt Nam. Xuất phát từ vận động viên thi đấu cấp tỉnh, tôi hiểu từng lỗi kỹ thuật nhỏ ảnh hưởng thế nào đến trận đấu — và cách sửa nhanh nhất để học viên tiến bộ thật sự, không chỉ "đánh được".</p>
+      <div class="about-chips">
+        <span class="chip" data-vi="Chứng chỉ VBF" data-en="VBF Certified">Chứng chỉ VBF</span>
+        <span class="chip" data-vi="7+ năm kinh nghiệm" data-en="7+ Years Exp.">7+ năm kinh nghiệm</span>
+        <span class="chip" data-vi="Cả 2 phái học" data-en="All Genders Welcome">Cả 2 phái học</span>
+        <span class="chip" data-vi="Lớp nhỏ ≤ 6 người" data-en="Max 6 per Class">Lớp nhỏ ≤ 6 người</span>
+        <span class="chip" data-vi="Đà Nẵng" data-en="Da Nang">Đà Nẵng</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="skills-inner">
+    <div class="skills-header reveal">
+      <p class="section-tag" data-vi="Chương trình học" data-en="What You'll Learn">Chương trình học</p>
+      <h2 class="section-title" data-vi="Bạn sẽ học được gì?" data-en="What's in the program?">Bạn sẽ học được gì?</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <span class="skill-icon">🏸</span>
+        <h3 data-vi="Kỹ thuật cơ bản" data-en="Core Technique">Kỹ thuật cơ bản</h3>
+        <p data-vi="Cách cầm vợt, di chuyển chân, các cú đánh nền tảng (clear, drop, smash, net) được xây từ gốc — đúng tư thế từ ngày đầu." data-en="Grip, footwork, and all foundational strokes (clear, drop, smash, net) built from the ground up — correct form from day one.">Cách cầm vợt, di chuyển chân, các cú đánh nền tảng được xây từ gốc — đúng tư thế từ ngày đầu.</p>
+      </div>
+      <div class="skill-card reveal">
+        <span class="skill-icon">🧠</span>
+        <h3 data-vi="Chiến thuật thi đấu" data-en="Match Tactics">Chiến thuật thi đấu</h3>
+        <p data-vi="Đọc bóng, kiểm soát nhịp trận, tấn công–thủ, tâm lý thi đấu và cách xây dựng điểm số có chủ đích." data-en="Reading the shuttle, controlling rally tempo, attack–defense balance, mental composure, and building points with purpose.">Đọc bóng, kiểm soát nhịp trận, tâm lý thi đấu và cách xây dựng điểm số có chủ đích.</p>
+      </div>
+      <div class="skill-card reveal">
+        <span class="skill-icon">⚡</span>
+        <h3 data-vi="Thể lực & Phong trào" data-en="Fitness & Movement">Thể lực & Phong trào</h3>
+        <p data-vi="Bài tập thể lực chuyên biệt cho cầu lông: tốc độ phản xạ, sức bền sân, linh hoạt — kết hợp vui, không nhàm chán." data-en="Badminton-specific conditioning: reaction speed, court endurance, flexibility — fun drills, never boring.">Bài tập thể lực chuyên biệt: tốc độ phản xạ, sức bền sân, linh hoạt — kết hợp vui, không nhàm chán.</p>
+      </div>
+      <div class="skill-card reveal">
+        <span class="skill-icon">🎯</span>
+        <h3 data-vi="Video phân tích" data-en="Video Analysis">Video phân tích</h3>
+        <p data-vi="Quay lại và phân tích từng buổi tập. Bạn thấy đúng lỗi mình mắc — tiến bộ nhanh gấp đôi." data-en="Recording and reviewing each session. You see your exact mistakes — progress twice as fast.">Quay lại và phân tích từng buổi tập. Bạn thấy đúng lỗi mình mắc — tiến bộ nhanh gấp đôi.</p>
+      </div>
+      <div class="skill-card reveal">
+        <span class="skill-icon">🤝</span>
+        <h3 data-vi="Đấu tập & giao lưu" data-en="Sparring & Community">Đấu tập & giao lưu</h3>
+        <p data-vi="Cộng đồng học viên tích cực. Tổ chức đấu giao lưu nội bộ hàng tháng để thực chiến kỹ năng." data-en="An active student community. Monthly internal friendly matches to put skills into real practice.">Cộng đồng học viên tích cực. Tổ chức đấu giao lưu nội bộ hàng tháng để thực chiến kỹ năng.</p>
+      </div>
+      <div class="skill-card reveal">
+        <span class="skill-icon">📱</span>
+        <h3 data-vi="Hỗ trợ ngoài sân" data-en="Off-Court Support">Hỗ trợ ngoài sân</h3>
+        <p data-vi="Group Zalo riêng mỗi lớp, clip bài tập bổ sung, giải đáp thắc mắc kỹ thuật — tôi đồng hành cả khi bạn tự tập." data-en="Private class group chat, supplementary drill clips, technique Q&amp;A — I'm with you even when you train solo.">Group Zalo riêng mỗi lớp, clip bài tập bổ sung, giải đáp kỹ thuật — tôi đồng hành cả khi bạn tự tập.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="test-inner">
+    <div class="test-header reveal">
+      <p class="section-tag" data-vi="Học viên nói gì" data-en="What Students Say">Học viên nói gì</p>
+      <h2 class="section-title" data-vi="Kết quả thật từ người thật" data-en="Real Results from Real People">Kết quả thật từ người thật</h2>
+    </div>
+    <div class="test-grid">
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text" data-vi='"Trước tôi đánh 2 năm mà vẫn sai hết. Học với chị Như 2 tháng, kỹ thuật thay đổi hoàn toàn. Bạn bè cứ hỏi tôi học ở đâu vậy!"' data-en='"I played for 2 years with all the wrong habits. After 2 months with Coach Nhu, my technique completely transformed. Friends keep asking where I train!"'>"Trước tôi đánh 2 năm mà vẫn sai hết. Học với chị Như 2 tháng, kỹ thuật thay đổi hoàn toàn. Bạn bè cứ hỏi tôi học ở đâu vậy!"</p>
+        <div class="test-author">
+          <div class="test-avatar">MT</div>
+          <div>
+            <div class="test-name">Minh Tuấn</div>
+            <div class="test-role" data-vi="Nhân viên văn phòng · 28 tuổi" data-en="Office Worker · Age 28">Nhân viên văn phòng · 28 tuổi</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text" data-vi='"Chị dạy rất tỉ mỉ, kiên nhẫn. Tôi là nữ mới học, chưa bao giờ bị mặc cảm hay bị dạy qua loa. Cảm giác được đầu tư thật sự."' data-en='"She teaches meticulously and patiently. As a female beginner I never felt dismissed or rushed. The attention to each student is genuinely impressive."'>"Chị dạy rất tỉ mỉ, kiên nhẫn. Tôi là nữ mới học, chưa bao giờ bị mặc cảm hay bị dạy qua loa. Cảm giác được đầu tư thật sự."</p>
+        <div class="test-author">
+          <div class="test-avatar">PA</div>
+          <div>
+            <div class="test-name">Phương Anh</div>
+            <div class="test-role" data-vi="Sinh viên · 21 tuổi" data-en="University Student · Age 21">Sinh viên · 21 tuổi</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card reveal">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text" data-vi='"Con trai tôi 12 tuổi học được 3 tháng, bây giờ đánh với người lớn cũng không còn sợ. Cách chị Như dạy trẻ con rất hiệu quả và vui."' data-en='"My 12-year-old son trained for 3 months — he now confidently plays against adults. Coach Nhu has a wonderful way of teaching kids that's both effective and fun."'>"Con trai tôi 12 tuổi học được 3 tháng, bây giờ đánh với người lớn không còn sợ nữa. Cách chị Như dạy trẻ con rất hiệu quả và vui."</p>
+        <div class="test-author">
+          <div class="test-avatar">TH</div>
+          <div>
+            <div class="test-name">Thanh Hoa</div>
+            <div class="test-role" data-vi="Phụ huynh học viên nhỏ tuổi" data-en="Parent of Young Student">Phụ huynh học viên nhỏ tuổi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="pricing-inner">
+    <div class="pricing-header reveal">
+      <p class="section-tag" data-vi="Học phí" data-en="Pricing">Học phí</p>
+      <h2 class="section-title" data-vi="Chọn lộ trình phù hợp" data-en="Choose Your Path">Chọn lộ trình phù hợp</h2>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card reveal">
+        <p class="price-tier" data-vi="Nhóm nhỏ" data-en="Small Group">Nhóm nhỏ</p>
+        <h3 class="price-name" data-vi="Cơ Bản" data-en="Foundation">Cơ Bản</h3>
+        <div class="price-amount">500k</div>
+        <p class="price-unit" data-vi="/ tháng · 8 buổi · ~4–6 người" data-en="/ month · 8 sessions · 4–6 people">/ tháng · 8 buổi · ~4–6 người</p>
+        <ul class="price-features">
+          <li data-vi="Kỹ thuật nền tảng" data-en="Foundational technique">Kỹ thuật nền tảng</li>
+          <li data-vi="Di chuyển & footwork" data-en="Movement & footwork">Di chuyển & footwork</li>
+          <li data-vi="Group Zalo hỗ trợ" data-en="Zalo group support">Group Zalo hỗ trợ</li>
+          <li data-vi="Lịch linh hoạt" data-en="Flexible schedule">Lịch linh hoạt</li>
+        </ul>
+        <a href="#contact" class="price-btn price-btn-outline" data-vi="Đăng ký ngay" data-en="Sign Up Now">Đăng ký ngay</a>
+      </div>
+      <div class="price-card featured reveal">
+        <div class="price-badge" data-vi="Phổ biến nhất" data-en="Most Popular">Phổ biến nhất</div>
+        <p class="price-tier" data-vi="Nhóm nhỏ" data-en="Small Group">Nhóm nhỏ</p>
+        <h3 class="price-name" data-vi="Nâng Cao" data-en="Advanced">Nâng Cao</h3>
+        <div class="price-amount">750k</div>
+        <p class="price-unit" data-vi="/ tháng · 8 buổi · ~4–6 người" data-en="/ month · 8 sessions · 4–6 people">/ tháng · 8 buổi · ~4–6 người</p>
+        <ul class="price-features">
+          <li data-vi="Toàn bộ gói Cơ Bản" data-en="Everything in Foundation">Toàn bộ gói Cơ Bản</li>
+          <li data-vi="Chiến thuật & thực chiến" data-en="Tactics & live sparring">Chiến thuật & thực chiến</li>
+          <li data-vi="Phân tích video buổi tập" data-en="Session video analysis">Phân tích video buổi tập</li>
+          <li data-vi="Đấu giao lưu hàng tháng" data-en="Monthly friendly matches">Đấu giao lưu hàng tháng</li>
+          <li data-vi="Clip bài tập tự luyện" data-en="Self-practice drill clips">Clip bài tập tự luyện</li>
+        </ul>
+        <a href="#contact" class="price-btn price-btn-solid" data-vi="Đăng ký ngay" data-en="Sign Up Now">Đăng ký ngay</a>
+      </div>
+      <div class="price-card reveal">
+        <p class="price-tier" data-vi="Cá nhân" data-en="Private">Cá nhân</p>
+        <h3 class="price-name" data-vi="1 — 1" data-en="1 — 1">1 — 1</h3>
+        <div class="price-amount">300k</div>
+        <p class="price-unit" data-vi="/ buổi · lịch theo yêu cầu" data-en="/ session · flexible schedule">/ buổi · lịch theo yêu cầu</p>
+        <ul class="price-features">
+          <li data-vi="Hoàn toàn cá nhân hóa" data-en="Fully personalized">Hoàn toàn cá nhân hóa</li>
+          <li data-vi="Sửa lỗi chuyên sâu" data-en="Deep technique correction">Sửa lỗi chuyên sâu</li>
+          <li data-vi="Chương trình riêng biệt" data-en="Custom program">Chương trình riêng biệt</li>
+          <li data-vi="Phù hợp chuẩn bị thi đấu" data-en="Ideal for competition prep">Phù hợp chuẩn bị thi đấu</li>
+        </ul>
+        <a href="#contact" class="price-btn price-btn-outline" data-vi="Liên hệ tư vấn" data-en="Get in Touch">Liên hệ tư vấn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <p class="section-tag reveal" style="text-align:center" data-vi="Bắt đầu ngay hôm nay" data-en="Start Today">Bắt đầu ngay hôm nay</p>
+    <h2 class="contact-title reveal">
+      <span data-vi="Sẵn sàng" data-en="Ready to">Sẵn sàng</span>
+      <span style="color:var(--mint)" data-vi=" lên sân" data-en=" hit the court"> lên sân</span>
+      <span data-vi=" chưa?" data-en=" yet?"> chưa?</span>
+    </h2>
+    <p class="contact-sub reveal" data-vi="Buổi học thử miễn phí — không cam kết, không áp lực. Chỉ cần bạn mang vợt và tinh thần sẵn sàng thử thách bản thân." data-en="A free trial class — no commitment, no pressure. Just bring your racket and the spirit to challenge yourself.">Buổi học thử miễn phí — không cam kết, không áp lực. Chỉ cần bạn mang vợt và tinh thần sẵn sàng thử thách bản thân.</p>
+    <div class="contact-btns reveal">
+      <a href="https://zalo.me/0912345678" target="_blank" class="zalo-btn">
+        <svg width="20" height="20" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="8" fill="#fff"/><text y="28" x="5" font-size="22" font-weight="bold" fill="#0068FF">Z</text></svg>
+        <span data-vi="Nhắn Zalo ngay" data-en="Message on Zalo">Nhắn Zalo ngay</span>
+      </a>
+      <a href="tel:+84912345678" class="phone-btn">
+        📞 0912 345 678
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2024 Phan Võ Huỳnh Như — <span data-vi="HLV Cầu Lông · Đà Nẵng" data-en="Badminton Coach · Da Nang">HLV Cầu Lông · Đà Nẵng</span></p>
+  <p>
+    <span data-vi="Thiết kế bởi" data-en="Designed by">Thiết kế bởi</span>
+    <a href="https://fb.com/xuannam1004" target="_blank"> Xuân Nam</a>
+    &nbsp;·&nbsp;
+    <a href="#hero" data-vi="Lên đầu ↑" data-en="Back to top ↑">Lên đầu ↑</a>
+  </p>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════
+//  THREE.JS HERO — Badminton Court + Shuttle
+// ═══════════════════════════════════════════
+(function(){
+  const canvas = document.getElementById('three-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 200);
+  camera.position.set(0, 6, 14);
+  camera.lookAt(0, 0, 0);
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+  const dirLight = new THREE.DirectionalLight(0x00E5A0, 1.2);
+  dirLight.position.set(5, 10, 5);
+  scene.add(dirLight);
+  const fillLight = new THREE.DirectionalLight(0x4488ff, 0.5);
+  fillLight.position.set(-8, 4, -4);
+  scene.add(fillLight);
+
+  // Court floor (glowing grid lines)
+  const courtGroup = new THREE.Group();
+  scene.add(courtGroup);
+
+  // Court surface
+  const floorGeo = new THREE.PlaneGeometry(13.4, 6.1);
+  const floorMat = new THREE.MeshStandardMaterial({
+    color: 0x0a1520, roughness: 0.8, metalness: 0.1,
+    transparent: true, opacity: 0.7
+  });
+  const floor = new THREE.Mesh(floorGeo, floorMat);
+  floor.rotation.x = -Math.PI / 2;
+  courtGroup.add(floor);
+
+  // Court lines helper
+  function makeLine(points, color = 0x00E5A0, opacity = 0.6) {
+    const geo = new THREE.BufferGeometry().setFromPoints(points);
+    const mat = new THREE.LineBasicMaterial({ color, transparent: true, opacity });
+    return new THREE.Line(geo, mat);
+  }
+  function hLine(z, x1, x2, opacity) {
+    return makeLine([new THREE.Vector3(x1,0.01,z), new THREE.Vector3(x2,0.01,z)], 0x00E5A0, opacity);
+  }
+  function vLine(x, z1, z2, opacity) {
+    return makeLine([new THREE.Vector3(x,0.01,z1), new THREE.Vector3(x,0.01,z2)], 0x00E5A0, opacity);
+  }
+
+  // Outer boundary
+  courtGroup.add(hLine(-3.05, -6.7, 6.7, .8));
+  courtGroup.add(hLine( 3.05, -6.7, 6.7, .8));
+  courtGroup.add(vLine(-6.7, -3.05, 3.05, .8));
+  courtGroup.add(vLine( 6.7, -3.05, 3.05, .8));
+  // Center
+  courtGroup.add(vLine(0, -3.05, 3.05, .5));
+  // Short service line
+  courtGroup.add(hLine(-1.98, -6.7, 6.7, .4));
+  courtGroup.add(hLine( 1.98, -6.7, 6.7, .4));
+  // Long service line doubles
+  courtGroup.add(hLine(-2.53, -6.7, 6.7, .3));
+  courtGroup.add(hLine( 2.53, -6.7, 6.7, .3));
+  // Doubles side
+  courtGroup.add(vLine(-5.18, -3.05, 3.05, .3));
+  courtGroup.add(vLine( 5.18, -3.05, 3.05, .3));
+
+  // NET
+  const netGeo = new THREE.PlaneGeometry(13.4, 1.55);
+  const netMat = new THREE.MeshStandardMaterial({
+    color: 0x00E5A0, transparent: true, opacity: 0.12,
+    side: THREE.DoubleSide, wireframe: false
+  });
+  const net = new THREE.Mesh(netGeo, netMat);
+  net.position.set(0, 0.78, 0);
+  courtGroup.add(net);
+
+  // Net post lines (wireframe)
+  const netWireGeo = new THREE.PlaneGeometry(13.4, 1.55, 26, 8);
+  const netWireMat = new THREE.MeshBasicMaterial({
+    color: 0x00E5A0, transparent: true, opacity: 0.25, wireframe: true
+  });
+  const netWire = new THREE.Mesh(netWireGeo, netWireMat);
+  netWire.position.set(0, 0.78, 0);
+  courtGroup.add(netWire);
+
+  // NET top bar
+  courtGroup.add(makeLine([
+    new THREE.Vector3(-6.7, 1.55, 0), new THREE.Vector3(6.7, 1.55, 0)
+  ], 0x00E5A0, 0.9));
+
+  courtGroup.rotation.y = 0.3;
+
+  // ── SHUTTLECOCK ──
+  // Cork (hemisphere base)
+  const corkGeo = new THREE.SphereGeometry(0.22, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2);
+  const corkMat = new THREE.MeshStandardMaterial({ color: 0xffe0a0, roughness: 0.6 });
+  const cork = new THREE.Mesh(corkGeo, corkMat);
+
+  // Skirt (cone wireframe)
+  const skirtGeo = new THREE.ConeGeometry(0.5, 0.8, 16, 1, true);
+  const skirtMat = new THREE.MeshStandardMaterial({
+    color: 0xffffff, transparent: true, opacity: 0.55,
+    side: THREE.DoubleSide, wireframe: false
+  });
+  const skirt = new THREE.Mesh(skirtGeo, skirtMat);
+  skirt.position.y = 0.4;
+
+  const skirtLines = new THREE.Mesh(
+    new THREE.ConeGeometry(0.5, 0.8, 16, 1, true),
+    new THREE.MeshBasicMaterial({ color: 0x00E5A0, transparent: true, opacity: 0.5, wireframe: true })
+  );
+  skirtLines.position.y = 0.4;
+
+  const shuttle = new THREE.Group();
+  shuttle.add(cork);
+  shuttle.add(skirt);
+  shuttle.add(skirtLines);
+  shuttle.position.set(3, 4, -2);
+  shuttle.rotation.z = -0.5;
+  scene.add(shuttle);
+
+  // ── RACKET (simplified) ──
+  const racketGroup = new THREE.Group();
+
+  // Handle
+  const handleGeo = new THREE.CylinderGeometry(0.04, 0.05, 1.5, 8);
+  const handleMat = new THREE.MeshStandardMaterial({ color: 0x1a2a3a, roughness: 0.7 });
+  const handle = new THREE.Mesh(handleGeo, handleMat);
+  handle.position.y = -0.75;
+  racketGroup.add(handle);
+
+  // Head ring (torus)
+  const headGeo = new THREE.TorusGeometry(0.55, 0.04, 8, 32);
+  const headMat = new THREE.MeshStandardMaterial({ color: 0x00C882, roughness: 0.3, metalness: 0.5 });
+  const head = new THREE.Mesh(headGeo, headMat);
+  head.position.y = 0.55;
+  racketGroup.add(head);
+
+  // Strings (grid lines across head)
+  for (let i = -4; i <= 4; i++) {
+    const x = i * 0.12;
+    const halfH = Math.sqrt(Math.max(0, 0.55 * 0.55 - x * x));
+    racketGroup.add(makeLine([
+      new THREE.Vector3(x, 0.55 - halfH, 0.01),
+      new THREE.Vector3(x, 0.55 + halfH, 0.01)
+    ], 0x00E5A0, 0.4));
+  }
+  for (let i = -4; i <= 4; i++) {
+    const y = 0.55 + i * 0.12;
+    const halfW = Math.sqrt(Math.max(0, 0.55 * 0.55 - (y - 0.55) * (y - 0.55)));
+    if (halfW > 0.02) {
+      racketGroup.add(makeLine([
+        new THREE.Vector3(-halfW, y, 0.01),
+        new THREE.Vector3( halfW, y, 0.01)
+      ], 0x00E5A0, 0.4));
+    }
+  }
+
+  racketGroup.position.set(-2, 2.5, 1);
+  racketGroup.rotation.z = 0.6;
+  racketGroup.rotation.y = 0.3;
+  scene.add(racketGroup);
+
+  // ── PARTICLE TRAIL ──
+  const trailCount = 80;
+  const trailPositions = new Float32Array(trailCount * 3);
+  for (let i = 0; i < trailCount; i++) {
+    trailPositions[i * 3] = shuttle.position.x;
+    trailPositions[i * 3 + 1] = shuttle.position.y;
+    trailPositions[i * 3 + 2] = shuttle.position.z;
+  }
+  const trailGeo = new THREE.BufferGeometry();
+  trailGeo.setAttribute('position', new THREE.BufferAttribute(trailPositions, 3));
+  const trailMat = new THREE.PointsMaterial({
+    color: 0x00E5A0, size: 0.06, transparent: true, opacity: 0.5
+  });
+  const trail = new THREE.Points(trailGeo, trailMat);
+  scene.add(trail);
+
+  // ── SCROLL-DRIVEN ANIMATION STATE ──
+  let scrollY = 0;
+  window.addEventListener('scroll', () => { scrollY = window.scrollY; });
+
+  // Smash arc keyframes (scroll 0 → heroHeight)
+  // At scroll=0: racket up, shuttle high-right
+  // At scroll=heroHeight: smash impact, shuttle flying down-left at speed
+
+  const clock = new THREE.Clock();
+  let trailIdx = 0;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+    const heroH = document.getElementById('hero').offsetHeight;
+    const scrollPct = Math.min(scrollY / (heroH * 0.85), 1); // 0..1
+
+    // Idle float (when not scrolling)
+    const idleFloat = Math.sin(t * 0.8) * 0.15;
+
+    // RACKET animation
+    if (scrollPct < 0.5) {
+      // Wind-up: racket goes back-up
+      const p = scrollPct / 0.5;
+      racketGroup.position.set(
+        -2 + p * 0.8,
+        2.5 + idleFloat + p * 1.2,
+        1
+      );
+      racketGroup.rotation.z = 0.6 - p * 1.8;
+      racketGroup.rotation.x = -p * 0.6;
+    } else {
+      // Smash swing: racket swings forward-down fast
+      const p = (scrollPct - 0.5) / 0.5;
+      const ease = 1 - Math.pow(1 - p, 3);
+      racketGroup.position.set(
+        -2 + 0.8 + ease * 2.5,
+        2.5 + idleFloat + 1.2 - ease * 3.0,
+        1
+      );
+      racketGroup.rotation.z = 0.6 - 1.8 + ease * (-1.4);
+      racketGroup.rotation.x = -0.6 + ease * (-0.5);
+    }
+
+    // SHUTTLE animation
+    if (scrollPct < 0.6) {
+      // Waiting to be smashed: gentle float
+      shuttle.position.set(
+        3 + Math.sin(t * 0.6) * 0.1,
+        4 + Math.cos(t * 0.5) * 0.12,
+        -2
+      );
+      shuttle.rotation.z = -0.5 + Math.sin(t * 0.4) * 0.05;
+    } else {
+      // Smash impact: shuttle blasts away
+      const p = (scrollPct - 0.6) / 0.4;
+      const ease = p * p;
+      shuttle.position.set(
+        3 - ease * 9,
+        4 - ease * 5,
+        -2 - ease * 3
+      );
+      shuttle.rotation.z = -0.5 - ease * 3;
+      shuttle.rotation.x = ease * 2;
+    }
+
+    // Trail: store recent shuttle positions
+    trailIdx = (trailIdx + 1) % trailCount;
+    const tp = trailGeo.attributes.position;
+    tp.setXYZ(trailIdx, shuttle.position.x, shuttle.position.y, shuttle.position.z);
+    tp.needsUpdate = true;
+
+    // Trail opacity: stronger during smash
+    trailMat.opacity = 0.1 + scrollPct * 0.6;
+
+    // Court gentle rotation
+    courtGroup.rotation.y = 0.3 + Math.sin(t * 0.15) * 0.04 + scrollPct * 0.3;
+    courtGroup.position.y = -1 - scrollPct * 1.5;
+
+    // Camera drift
+    camera.position.x = Math.sin(t * 0.1) * 0.4;
+    camera.position.y = 6 + scrollPct * 2;
+    camera.position.z = 14 + scrollPct * 2;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+})();
+
+// ═══════════════════════════════════════════
+//  LANGUAGE TOGGLE
+// ═══════════════════════════════════════════
+let currentLang = 'vi';
+
+function toggleLang() {
+  currentLang = currentLang === 'vi' ? 'vi' : 'en';
+  const flag = document.getElementById('langFlag');
+  const label = document.getElementById('langLabel');
+  flag.textContent = currentLang === 'vi' ? '🇻🇳' : '🇬🇧';
+  label.textContent = currentLang === 'vi' ? 'VI' : 'EN';
+
+  document.querySelectorAll('[data-vi]').forEach(el => {
+    const val = el.getAttribute('data-' + currentLang);
+    if (val !== null) {
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        el.placeholder = val;
+      } else {
+        el.textContent = val;
+      }
+    }
+  });
+
+  document.documentElement.lang = currentLang;
+}
+
+// ═══════════════════════════════════════════
+//  NAV SCROLL
+// ═══════════════════════════════════════════
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ═══════════════════════════════════════════
+//  REVEAL
+// ═══════════════════════════════════════════
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 75);
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => revealObs.observe(el));
+
+// ═══════════════════════════════════════════
+//  SIDE DOTS
+// ═══════════════════════════════════════════
+const dots = document.querySelectorAll('.dot');
+const sections = ['hero','about','skills','testimonials','pricing','contact'];
+dots.forEach(d => {
+  d.addEventListener('click', () => {
+    document.getElementById(d.dataset.target).scrollIntoView({ behavior: 'smooth' });
+  });
+});
+const secObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const idx = sections.indexOf(e.target.id);
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(id => { const el = document.getElementById(id); if (el) secObs.observe(el); });
+</script>
+</body>
+</html>
