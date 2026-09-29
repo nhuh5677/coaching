@@ -38,10 +38,10 @@ body.theme-shop{background:#F7F6F3;color:#121314}
   border-bottom:1px solid var(--line);
 }
 .s-logo{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
-.s-logo-word{font-family:var(--f-display);font-weight:700;font-size:1.08rem;letter-spacing:.14em}
+.s-logo-word{font-family:var(--f-display);font-weight:700;font-size:1.08rem;letter-spacing:.14em;color:inherit;text-decoration:none}
 .s-logo-sep{width:1px;height:18px;background:var(--line)}
 .s-logo-sub{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3)}
-.s-logo:hover .s-logo-word{color:var(--accent)}
+.s-logo-word:hover{color:var(--accent)}
 .s-nav-right{display:flex;align-items:center;gap:6px}
 .s-nav-link,.s-nav-cta{
   display:inline-flex;align-items:center;gap:8px;text-decoration:none;

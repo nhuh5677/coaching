@@ -9,11 +9,11 @@ import './shop.css'
 function ShopNav() {
   return (
     <header className="s-nav">
-      <Link to="/" className="s-logo" title="Về trang giới thiệu HLV">
-        <span className="s-logo-word">HUỲNH NHƯ</span>
+      <div className="s-logo">
+        <Link to="/" className="s-logo-word" title="Về trang giới thiệu HLV">HUỲNH NHƯ</Link>
         <span className="s-logo-sep" aria-hidden="true" />
         <span className="s-logo-sub">Badminton Store</span>
-      </Link>
+      </div>
       <div className="s-nav-right">
         <a href={CONTACT.tiktok} target="_blank" rel="noreferrer" className="s-nav-link" title={`TikTok ${CONTACT.tiktokHandle}`}>
           <TikTokIcon size={16} />

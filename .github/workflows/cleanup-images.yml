@@ -9,6 +9,10 @@ on:
         description: 'Chỉ liệt kê, không xoá'
         type: boolean
         default: true
+      min_age_hours:
+        description: 'Chỉ xoá ảnh upload quá số giờ này (0 = xoá cả ảnh vừa upload)'
+        type: number
+        default: 24
 
 permissions:
   contents: read
@@ -33,3 +37,4 @@ jobs:
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
           DRY_RUN: ${{ inputs.dry_run || 'false' }}
+          MIN_AGE_HOURS: ${{ github.event_name == 'workflow_dispatch' && format('{0}', inputs.min_age_hours) || '24' }}
