@@ -6,7 +6,9 @@
 //   (.env.local chứa CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET — không commit file này)
 
 const TAG = 'coaching-nhu-product' // khớp CLOUDINARY_TAG trong src/lib/images.js
-const MIN_AGE_HOURS = 24 // bỏ qua ảnh mới upload — có thể admin đang soạn sản phẩm dở
+const PREFIX = 'coaching-nhu/products/' // khớp folder trong src/lib/images.js (ảnh upload trước khi có tag)
+// Bỏ qua ảnh mới upload — có thể admin đang soạn sản phẩm dở
+const MIN_AGE_HOURS = Number(process.env.MIN_AGE_HOURS || 24)
 
 const {
   VITE_CLOUDINARY_CLOUD_NAME: CLOUD_NAME,
@@ -61,19 +63,28 @@ function publicIdFromUrl(url) {
   return decodeURIComponent(rest.join('/')).replace(/\.[a-z0-9]+$/i, '')
 }
 
-async function fetchTaggedImages() {
+async function listResources(path) {
   const all = []
   let cursor = ''
   do {
+    const sep = path.includes('?') ? '&' : '?'
     const json = await getJson(
-      `${cloudApi}/resources/image/tags/${TAG}?max_results=500${cursor ? `&next_cursor=${cursor}` : ''}`,
+      `${cloudApi}/resources/image/${path}${sep}max_results=500${cursor ? `&next_cursor=${cursor}` : ''}`,
       { headers: { Authorization: cloudAuth } },
     )
     all.push(...json.resources)
     cursor = json.next_cursor || ''
   } while (cursor)
-  console.log(`Cloudinary: ${all.length} ảnh có tag "${TAG}"`)
   return all
+}
+
+/** Ảnh của shop: có tag, hoặc nằm trong thư mục sản phẩm */
+async function fetchShopImages() {
+  const byId = new Map()
+  for (const r of await listResources(`tags/${TAG}`)) byId.set(r.public_id, r)
+  for (const r of await listResources(`upload?prefix=${encodeURIComponent(PREFIX)}`)) byId.set(r.public_id, r)
+  console.log(`Cloudinary: ${byId.size} ảnh của shop (tag "${TAG}" hoặc thư mục "${PREFIX}")`)
+  return [...byId.values()]
 }
 
 async function deleteImages(publicIds) {
@@ -90,12 +101,12 @@ async function deleteImages(publicIds) {
 
 // Đọc Firestore trước: nếu lỗi thì dừng luôn, không bao giờ xoá khi chưa biết ảnh nào đang dùng
 const usedIds = new Set([...(await fetchUsedImageUrls())].map(publicIdFromUrl).filter(Boolean))
-const images = await fetchTaggedImages()
+const images = await fetchShopImages()
 const cutoff = Date.now() - MIN_AGE_HOURS * 3600 * 1000
 const orphans = images.filter((r) => !usedIds.has(r.public_id) && new Date(r.created_at).getTime() < cutoff)
 
 if (!orphans.length) {
-  console.log('Không có ảnh nào cần xoá.')
+  console.log(`Không có ảnh nào cần xoá (chỉ xét ảnh upload quá ${MIN_AGE_HOURS} giờ).`)
 } else if (DRY_RUN) {
   console.log(`[DRY RUN] Sẽ xoá ${orphans.length} ảnh:`)
   for (const r of orphans) console.log(`  ${r.public_id}  (${r.created_at}, ${Math.round(r.bytes / 1024)} KB)`)
