@@ -1,0 +1,35 @@
+name: Dọn ảnh Cloudinary không dùng
+
+on:
+  schedule:
+    - cron: '0 20 * * *' # 3h sáng giờ Việt Nam
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Chỉ liệt kê, không xoá'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Cloud name + Firebase project lấy từ Variable APP_ENV; API key/secret lấy từ GitHub Secrets
+      - name: Tạo .env
+        run: |
+          if [ -z "$APP_ENV" ]; then echo "::error::Chưa khai báo Variable APP_ENV"; exit 1; fi
+          printf '%s\n' "$APP_ENV" > .env
+        env:
+          APP_ENV: ${{ vars.APP_ENV }}
+      - run: node --env-file=.env scripts/cleanup-cloudinary.mjs
+        env:
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          DRY_RUN: ${{ inputs.dry_run || 'false' }}

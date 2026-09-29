@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Email admin — phải khớp VITE_ADMIN_EMAILS trong .env
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email in ['xnam7799@gmail.com'];
+    }
+
+    function validProduct() {
+      let d = request.resource.data;
+      return d.name is string && d.name.size() > 0 && d.name.size() <= 200
+        && d.price is number && d.price >= 0
+        && d.gender in ['nam', 'nu', 'unisex']
+        && d.sizes is list
+        && d.images is list && d.images.size() <= 8;
+    }
+
+    match /products/{productId} {
+      allow read: if true;                       // ai cũng xem được shop
+      allow create, update: if isAdmin() && validProduct();
+      allow delete: if isAdmin();
+    }
+
+    // Chặn mọi collection khác
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
