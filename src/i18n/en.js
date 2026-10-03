@@ -48,7 +48,7 @@ export default {
     },
     testimonials: {
       tag: 'Student stories',
-      title: 'Real results from real people',
+      title: 'Real results from our students',
       items: [
         { role: 'Office worker', text: '"I played on my own for almost a year with poor technique, so I just wasn\'t improving. Since training here my strokes feel cleaner and more effortless — I can hit full-court clears with ease."' },
         { role: 'University student', text: '"I used to think watching videos was enough. Once I started lessons, I realized I should have started sooner — you improve faster and avoid injuries."' },

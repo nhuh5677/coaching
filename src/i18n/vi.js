@@ -48,7 +48,7 @@ export default {
     },
     testimonials: {
       tag: 'Học viên nói gì',
-      title: 'Kết quả thật từ người thật',
+      title: 'Kết quả thật từ học viên',
       items: [
         { role: 'Nhân viên văn phòng', text: '"Lúc trước tự chơi cũng được gần 1 năm, kiểu đánh kh đúng kỹ thuật nên trình cứ dậm tại chỗ. Từ khi học ở đây cảm giác đánh đúng kỹ thuâht đường cầu nét hơn nhẹ nhàng khi phát lực mà toàn cuối sân."' },
         { role: 'Sinh viên', text: '"Xưa cứ nghĩ nhìn video là chơi được, mà thật sự học vô mới biết nên học từ sớm hơn để nhanh lên trình hạn chế chấn thương á."' },
