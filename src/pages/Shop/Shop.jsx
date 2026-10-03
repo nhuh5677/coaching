@@ -32,11 +32,11 @@ function Hero({ products, onPick }) {
       <div className="s-hero-text">
         <p className="s-kicker">Badminton Apparel · Đà Nẵng</p>
         <h1 className="s-hero-title">
-          Trang phục cầu lông,<br />
-          <em>chuẩn từng chuyển động.</em>
+          Trang phục cầu lông có gu.<br />
+          <em>Mặc đẹp trên sân, chỉn chu ngoài đời.</em>
         </h1>
         <p className="s-hero-sub">
-          Những thiết kế được chọn lọc cho người chơi nghiêm túc — thoáng khí, co giãn,
+          Những thiết kế được chọn lọc cho người chơi có gu — thoáng khí, co giãn,
           đứng form trên sân và chỉn chu ngoài đời thường.
         </p>
         <div className="s-hero-ctas">

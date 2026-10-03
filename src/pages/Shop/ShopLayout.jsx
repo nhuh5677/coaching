@@ -61,7 +61,7 @@ export default function ShopLayout({ children }) {
           <div className="s-footer-inner">
             <div className="s-footer-brand">
               <p className="s-footer-logo">HUỲNH NHƯ</p>
-              <p className="s-footer-title">Trang phục cầu lông <em>cho người chơi nghiêm túc.</em></p>
+              <p className="s-footer-title">Trang phục cầu lông <em>cho người chơi có gu.</em></p>
               <p className="s-footer-sub">Cần tư vấn size hay phối đồ? Liên hệ trực tiếp, shop hỗ trợ bạn chọn sản phẩm phù hợp nhất.</p>
             </div>
             <div className="s-footer-cols">
