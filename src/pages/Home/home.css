@@ -226,6 +226,14 @@
 .tiktok-btn svg{filter:drop-shadow(-1.5px -1px 0 #25F4EE) drop-shadow(1.5px 1px 0 #FE2C55)}
 .tiktok-btn span{text-transform:none;letter-spacing:.02em}
 .tiktok-btn:hover{border-color:#FE2C55;transform:translateY(-2px)}
+.fb-btn{
+  display:flex;align-items:center;gap:9px;
+  background:#1877F2;color:#fff;border:1px solid transparent;
+  padding:13px 28px;border-radius:3px;text-decoration:none;
+  font-weight:700;font-size:.86rem;letter-spacing:.02em;
+  transition:background .2s,transform .2s;animation:blink 1.5s infinite;
+}
+.fb-btn:hover{background:#0F65D6;transform:translateY(-2px)}
 
 /* ── FOOTER ── */
 footer.home-footer{
@@ -264,4 +272,10 @@ footer.home-footer a{color:var(--mint);text-decoration:none}
   .pricing-grid{grid-template-columns:1fr}
   .home footer.home-footer{flex-direction:column;gap:8px;text-align:center}
   #side-dots{display:none}
+}
+
+/* Nút liên hệ trên điện thoại: xếp dọc, cùng bề rộng */
+@media(max-width:600px){
+  .contact-btns{flex-direction:column;align-items:stretch;max-width:340px;margin:0 auto}
+  .contact-btns a{justify-content:center;padding:13px 16px;white-space:nowrap}
 }

@@ -15,7 +15,7 @@ React (Vite) + Firebase (Firestore + Authentication), deploy lên GitHub Pages.
 > **Đa ngôn ngữ (VI / EN):** nút chọn ngôn ngữ ở góc phải thanh menu. Mặc định tiếng Việt; khách bấm EN thì cả web chuyển sang tiếng Anh, **giá USD hiển thị chính** (VI thì VNĐ chính). Lựa chọn được ghi nhớ trên trình duyệt; có thể gửi link thẳng bản tiếng Anh bằng `?lang=en` (VD `.../shop?lang=en`).
 > Sửa câu chữ trên web: `src/i18n/vi.js` (tiếng Việt) và `src/i18n/en.js` (tiếng Anh).
 > Tên / mô tả sản phẩm tiếng Anh: nhập ở ô **"Tên tiếng Anh"**, **"Mô tả tiếng Anh"** trong form admin (bỏ trống thì hiện bản tiếng Việt).
-> Đổi số điện thoại, link TikTok, tỉ giá USD: sửa `src/lib/config.js`.
+> Đổi số điện thoại, link TikTok, Facebook, tỉ giá USD: sửa `src/lib/config.js`.
 
 ---
 
@@ -119,7 +119,7 @@ src/
     Admin/       Admin.jsx (kiểm tra đăng nhập), LoginForm, Dashboard, ProductForm, admin.css
   components/    SiteNav, Toast, Icons, ProductImage
   lib/
-    config.js    SĐT Zalo, TikTok, tỉ giá USD, danh mục, size  ← sửa thông tin shop ở đây
+    config.js    SĐT Zalo, TikTok, Facebook, tỉ giá USD, danh mục, size  ← sửa thông tin shop ở đây
   i18n/          vi.js, en.js — toàn bộ câu chữ 2 ngôn ngữ; index.jsx — context đổi ngôn ngữ
     firebase.js  Khởi tạo Firebase
     products.js  Đọc/ghi Firestore

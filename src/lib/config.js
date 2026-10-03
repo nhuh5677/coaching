@@ -5,6 +5,8 @@ export const CONTACT = {
   tel: 'tel:+84918887581',
   tiktok: 'https://www.tiktok.com/@daycaulong_hn',
   tiktokHandle: '@daycaulong_hn',
+  facebook: 'https://www.facebook.com/profile.php?id=61581019289410',
+  facebookName: 'Huỳnh Như Badminton Academy',
 }
 
 // Tỉ giá quy đổi để hiện giá USD song song (1 USD = ? VNĐ). Cập nhật khi tỉ giá thay đổi.

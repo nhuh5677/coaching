@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import SiteNav from '../../components/SiteNav'
-import { BagIcon, TikTokIcon, ZaloIcon } from '../../components/Icons'
+import { BagIcon, FacebookIcon, TikTokIcon, ZaloIcon } from '../../components/Icons'
 import { CONTACT } from '../../lib/config'
 import { useReveal } from '../../lib/useReveal'
 import { useLang } from '../../i18n'
@@ -213,6 +213,10 @@ export default function Home() {
               <TikTokIcon size={18} />
               <span>TikTok {CONTACT.tiktokHandle}</span>
             </a>
+            <a href={CONTACT.facebook} target="_blank" rel="noreferrer" className="fb-btn">
+              <FacebookIcon size={18} />
+              <span>{CONTACT.facebookName}</span>
+            </a>
           </div>
         </div>
       </section>
@@ -221,6 +225,7 @@ export default function Home() {
         <p>
           © {new Date().getFullYear()} {t('home.footer.coach')} · <Link to="/shop">{t('home.footer.shop')}</Link>
           {' · '}<a href={CONTACT.tiktok} target="_blank" rel="noreferrer">TikTok {CONTACT.tiktokHandle}</a>
+          {' · '}<a href={CONTACT.facebook} target="_blank" rel="noreferrer">Facebook</a>
         </p>
         <p><a href="#hero">{t('home.footer.top')}</a></p>
       </footer>

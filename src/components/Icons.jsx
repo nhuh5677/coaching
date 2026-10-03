@@ -45,6 +45,12 @@ export const TikTokIcon = ({ size = 18 }) => (
   </svg>
 )
 
+export const FacebookIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M13.5 21.9v-7.6h2.6l.4-3h-3V9.4c0-.9.3-1.5 1.5-1.5h1.6V5.2c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6v7.6A10 10 0 1 1 13.5 21.9z" />
+  </svg>
+)
+
 // Hình quả cầu dùng làm placeholder khi sản phẩm chưa có ảnh
 export const ShuttleArt = ({ className }) => (
   <svg className={className} viewBox="0 0 120 120" fill="none" aria-hidden="true">

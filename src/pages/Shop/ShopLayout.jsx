@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { TikTokIcon, ZaloIcon } from '../../components/Icons'
+import { FacebookIcon, TikTokIcon, ZaloIcon } from '../../components/Icons'
 import { CONTACT } from '../../lib/config'
 import { isFirebaseConfigured } from '../../lib/firebase'
 import { BuyProvider } from './BuySheet'
@@ -22,6 +22,10 @@ function ShopNav() {
         <a href={CONTACT.tiktok} target="_blank" rel="noreferrer" className="s-nav-link" title={`TikTok ${CONTACT.tiktokHandle}`}>
           <TikTokIcon size={16} />
           <span>{t('shop.nav.tiktok')}</span>
+        </a>
+        <a href={CONTACT.facebook} target="_blank" rel="noreferrer" className="s-nav-link" title={`Facebook ${CONTACT.facebookName}`}>
+          <FacebookIcon size={16} />
+          <span>Facebook</span>
         </a>
         <a href={CONTACT.zalo} target="_blank" rel="noreferrer" className="s-nav-cta">
           <ZaloIcon size={16} />
@@ -74,6 +78,7 @@ export default function ShopLayout({ children }) {
                 <p className="s-footer-h">{t('shop.footer.order')}</p>
                 <a href={CONTACT.zalo} target="_blank" rel="noreferrer"><ZaloIcon size={16} /> Zalo {CONTACT.phone}</a>
                 <a href={CONTACT.tiktok} target="_blank" rel="noreferrer"><TikTokIcon size={15} /> TikTok {CONTACT.tiktokHandle}</a>
+                <a href={CONTACT.facebook} target="_blank" rel="noreferrer"><FacebookIcon size={15} /> {CONTACT.facebookName}</a>
                 <a href={CONTACT.tel}>Hotline {CONTACT.phone}</a>
               </div>
               <div>
