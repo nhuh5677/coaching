@@ -51,6 +51,11 @@ export const FacebookIcon = ({ size = 18 }) => (
   </svg>
 )
 
+/** Icon quả cầu lông nhỏ (dùng cho nút "Đăng ký học") */
+export const ShuttleIcon = (p) => (
+  <svg {...base} {...p}><path d="M12 20 6.5 8.5Q12 5.5 17.5 8.5L12 20z" /><path d="M9.3 7.3 12 20l2.7-12.7" /><circle cx="12" cy="20" r="1.6" fill="currentColor" /></svg>
+)
+
 // Hình quả cầu dùng làm placeholder khi sản phẩm chưa có ảnh
 export const ShuttleArt = ({ className }) => (
   <svg className={className} viewBox="0 0 120 120" fill="none" aria-hidden="true">

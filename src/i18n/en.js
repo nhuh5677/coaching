@@ -80,7 +80,7 @@ export default {
     docTitle: 'Huỳnh Như Badminton Store',
     logoTitle: 'Back to the coach’s page',
     topbar: { order: 'Order via Zalo', tiktok: 'TikTok', advice: 'Free size consultation' },
-    nav: { tiktok: 'TikTok', zalo: 'Contact on Zalo' },
+    nav: { tiktok: 'TikTok', zalo: 'Contact on Zalo', learn: 'Book badminton lessons', learnShort: 'Lessons' },
     demo: 'Viewing sample data — Firebase is not connected yet (see README).',
     hero: {
       kicker: 'Badminton Apparel · Da Nang',

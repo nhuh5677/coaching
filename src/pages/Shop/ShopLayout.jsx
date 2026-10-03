@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { FacebookIcon, TikTokIcon, ZaloIcon } from '../../components/Icons'
+import { FacebookIcon, ShuttleIcon, TikTokIcon, ZaloIcon } from '../../components/Icons'
 import { CONTACT } from '../../lib/config'
 import { isFirebaseConfigured } from '../../lib/firebase'
 import { BuyProvider } from './BuySheet'
@@ -27,6 +27,11 @@ function ShopNav() {
           <FacebookIcon size={16} />
           <span>Facebook</span>
         </a>
+        <Link to="/" className="s-nav-learn">
+          <ShuttleIcon />
+          <span className="s-nav-learn-full">{t('shop.nav.learn')}</span>
+          <span className="s-nav-learn-short">{t('shop.nav.learnShort')}</span>
+        </Link>
         <a href={CONTACT.zalo} target="_blank" rel="noreferrer" className="s-nav-cta">
           <ZaloIcon size={16} />
           <span>{t('shop.nav.zalo')}</span>

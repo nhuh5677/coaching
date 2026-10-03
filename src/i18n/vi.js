@@ -80,7 +80,7 @@ export default {
     docTitle: 'Huỳnh Như Badminton Store',
     logoTitle: 'Về trang giới thiệu HLV',
     topbar: { order: 'Đặt hàng qua Zalo', tiktok: 'TikTok', advice: 'Tư vấn chọn size miễn phí' },
-    nav: { tiktok: 'TikTok', zalo: 'Liên hệ Zalo' },
+    nav: { tiktok: 'TikTok', zalo: 'Liên hệ Zalo', learn: 'Đăng ký học cầu lông', learnShort: 'Học cầu lông' },
     demo: 'Đang xem dữ liệu mẫu — chưa kết nối Firebase (xem README).',
     hero: {
       kicker: 'Badminton Apparel · Đà Nẵng',
