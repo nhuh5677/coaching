@@ -4,34 +4,24 @@ import SiteNav from '../../components/SiteNav'
 import { BagIcon, TikTokIcon, ZaloIcon } from '../../components/Icons'
 import { CONTACT } from '../../lib/config'
 import { useReveal } from '../../lib/useReveal'
+import { useLang } from '../../i18n'
+import LangSwitch from '../../components/LangSwitch'
 import HeroCanvas from './HeroCanvas'
 import coachPhoto from '../../assets/image1.jpg'
 import './home.css'
 
 const SECTIONS = ['hero', 'about', 'skills', 'testimonials', 'pricing', 'contact']
 
-const SKILLS = [
-  { icon: '🏸', title: 'Kỹ thuật cơ bản', text: 'Cách cầm vợt, di chuyển chân, các cú đánh nền tảng được xây từ gốc — đúng tư thế từ ngày đầu.' },
-  { icon: '🧠', title: 'Chiến thuật thi đấu', text: 'Đọc cầu, kiểm soát nhịp trận, tâm lý thi đấu và cách xây dựng điểm số có chủ đích.' },
-  { icon: '⚡', title: 'Thể lực & Phong trào', text: 'Bài tập thể lực chuyên biệt: tốc độ phản xạ, sức bền sân, linh hoạt — kết hợp vui, không nhàm chán.' },
-  { icon: '🎯', title: 'Video phân tích', text: 'Quay lại và phân tích từng buổi tập. Bạn thấy đúng lỗi mình mắc — tiến bộ nhanh gấp đôi.' },
-  { icon: '🤝', title: 'Đấu tập & giao lưu', text: 'Cộng đồng học viên tích cực. Tổ chức đấu giao lưu nội bộ hàng tháng để thực chiến kỹ năng.' },
+// Phần không cần dịch; text nằm trong src/i18n/vi.js & en.js (mục home)
+const SKILL_ICONS = ['🏸', '🧠', '⚡', '🎯', '🤝']
+const STUDENTS = [
+  { initials: 'MT', name: 'Minh Tuấn' },
+  { initials: 'PA', name: 'Phương Anh' },
+  { initials: 'TH', name: 'Thanh Hoa' },
 ]
-
-const TESTIMONIALS = [
-  { initials: 'MT', name: 'Minh Tuấn', role: 'Nhân viên văn phòng', text: '"Lúc trước tự chơi cũng được gần 1 năm, kiểu đánh kh đúng kỹ thuật nên trình cứ dậm tại chỗ. Từ khi học ở đây cảm giác đánh đúng kỹ thuâht đường cầu nét hơn nhẹ nhàng khi phát lực mà toàn cuối sân."' },
-  { initials: 'PA', name: 'Phương Anh', role: 'Sinh viên', text: '"Xưa cứ nghĩ nhìn video là chơi được, mà thật sự học vô mới biết nên học từ sớm hơn để nhanh lên trình hạn chế chấn thương á."' },
-  { initials: 'TH', name: 'Thanh Hoa', role: 'Phụ huynh học viên nhỏ tuổi', text: '"Cô dạy có tâm, tận tình chỉnh sửa từng động tác sai. 10 điểm."' },
-]
-
-const PLANS = [
-  { name: 'Cơ bản', featured: true, features: ['Toàn bộ kỹ thuật Cơ Bản', 'Chiến thuật & thực chiến', 'Phân tích video buổi tập', 'Đấu giao lưu hàng tháng'] },
-  { name: 'Nâng cao', features: ['Kỹ thuật nâng cao', 'Sửa lỗi chuyên sâu', 'Chương trình riêng biệt', 'Phù hợp chuẩn bị thi đấu'] },
-]
-
-const CHIPS = ['Cử nhân Đại học TDTT', 'Thạc sĩ Giáo dục học', 'Chuyên sâu cầu lông', '7+ năm kinh nghiệm', 'Nam và Nữ', 'Dạy kèm ≤ 5 người', 'Đà Nẵng']
 
 function SideDots() {
+  const { t } = useLang()
   const [active, setActive] = useState('hero')
 
   useEffect(() => {
@@ -48,7 +38,7 @@ function SideDots() {
         <button
           key={id}
           type="button"
-          aria-label={`Tới mục ${id}`}
+          aria-label={t('home.goTo', { id })}
           className={`dot${active === id ? ' active' : ''}`}
           onClick={() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })}
         />
@@ -59,10 +49,13 @@ function SideDots() {
 
 export default function Home() {
   const heroRef = useRef(null)
-  useReveal()
+  const { lang, t } = useLang()
+  // Đổi ngôn ngữ → React vẽ lại các phần tử .reveal, cần quan sát lại để chúng hiện ra
+  useReveal([lang])
+
+  useEffect(() => { document.title = t('home.docTitle') }, [t])
 
   useEffect(() => {
-    document.title = 'Phan Võ Huỳnh Như — HLV Cầu Lông'
     // Vào từ link dạng "/#contact" → cuộn tới đúng mục sau khi render
     if (window.location.hash) {
       document.getElementById(window.location.hash.slice(1))?.scrollIntoView()
@@ -74,16 +67,17 @@ export default function Home() {
       <SiteNav
         links={(
           <ul className="nav-links">
-            <li><a href="#about">Về tôi</a></li>
-            <li><a href="#skills">Chương trình</a></li>
-            <li><a href="#testimonials">Học viên</a></li>
-            <li><a href="#pricing">Lộ trình học</a></li>
+            <li><a href="#about">{t('home.nav.about')}</a></li>
+            <li><a href="#skills">{t('home.nav.skills')}</a></li>
+            <li><a href="#testimonials">{t('home.nav.testimonials')}</a></li>
+            <li><a href="#pricing">{t('home.nav.pricing')}</a></li>
           </ul>
         )}
         right={(
           <>
-            <Link to="/shop" className="nav-shop"><BagIcon /> Shop</Link>
-            <a href="#contact" className="nav-cta">Đăng ký</a>
+            <LangSwitch />
+            <Link to="/shop" className="nav-shop"><BagIcon /> {t('home.nav.shop')}</Link>
+            <a href="#contact" className="nav-cta">{t('home.nav.signup')}</a>
           </>
         )}
       />
@@ -95,19 +89,19 @@ export default function Home() {
         <HeroCanvas heroRef={heroRef} />
         <div className="hero-overlay" />
         <div className="hero-content">
-          <p className="hero-eyebrow">HLV Cầu Lông · Đà Nẵng</p>
+          <p className="hero-eyebrow">{t('home.hero.eyebrow')}</p>
           <h1 className="hero-title">
-            <span>Đánh đúng kỹ thuật.</span>
-            <em>Nâng cao sức khoẻ.</em>
+            <span>{t('home.hero.title1')}</span>
+            <em>{t('home.hero.title2')}</em>
           </h1>
-          <p className="hero-sub">Hơn 7 năm kinh nghiệm — tôi giúp bạn xây nền kỹ thuật vững chắc, đánh cầu có tư duy, và yêu môn thể thao này theo cách hoàn toàn mới.</p>
+          <p className="hero-sub">{t('home.hero.sub')}</p>
           <div className="hero-actions">
-            <a href="#contact" className="btn-primary">Đăng ký học</a>
-            <a href="#about" className="btn-ghost">Tìm hiểu thêm</a>
+            <a href="#contact" className="btn-primary">{t('home.hero.cta')}</a>
+            <a href="#about" className="btn-ghost">{t('home.hero.more')}</a>
           </div>
         </div>
         <div className="scroll-hint">
-          <span>Cuộn xuống</span>
+          <span>{t('home.hero.scroll')}</span>
           <div className="scroll-line" />
         </div>
       </section>
@@ -116,18 +110,18 @@ export default function Home() {
       <section id="about">
         <div className="about-inner">
           <div className="about-photo-wrap reveal">
-            <img src={coachPhoto} alt="HLV Huỳnh Như" />
+            <img src={coachPhoto} alt={t('home.about.photoAlt')} />
           </div>
           <div className="reveal">
-            <p className="section-tag">Về tôi</p>
+            <p className="section-tag">{t('home.about.tag')}</p>
             <h2 className="section-title">
-              <span>Không chỉ dạy đánh —</span><br />
-              <em style={{ color: 'var(--mint)', fontStyle: 'normal' }}>tôi dạy bạn hiểu cầu.</em>
+              <span>{t('home.about.title1')}</span><br />
+              <em style={{ color: 'var(--mint)', fontStyle: 'normal' }}>{t('home.about.title2')}</em>
             </h2>
-            <p className="about-quote">"Kỹ thuật tốt không đến từ luyện tập nhiều — mà từ tập luyện đúng."</p>
-            <p className="about-text">Là một Cử nhân/Thạc sĩ chuyên ngành Giáo dục Thể chất. Từ kiến thức chính quy và thực tiễn, tôi hiểu rằng: mỗi lỗi kỹ thuật nhỏ – từ cách cầm vợt, di chuyển, bước chân – đều ảnh hưởng trực tiếp đến hiệu quả thi đấu và nguy cơ chấn thương. Tôi giúp bạn đánh đúng, đánh hay, đồng thời nâng cao sức khỏe một cách khoa học, an toàn.</p>
+            <p className="about-quote">{t('home.about.quote')}</p>
+            <p className="about-text">{t('home.about.text')}</p>
             <div className="about-chips">
-              {CHIPS.map((c) => <span key={c} className="chip">{c}</span>)}
+              {t('home.about.chips').map((c) => <span key={c} className="chip">{c}</span>)}
             </div>
           </div>
         </div>
@@ -137,13 +131,13 @@ export default function Home() {
       <section id="skills">
         <div className="skills-inner">
           <div className="skills-header reveal">
-            <p className="section-tag">Chương trình học</p>
-            <h2 className="section-title">Bạn sẽ học được gì?</h2>
+            <p className="section-tag">{t('home.skills.tag')}</p>
+            <h2 className="section-title">{t('home.skills.title')}</h2>
           </div>
           <div className="skills-grid">
-            {SKILLS.map((s) => (
+            {t('home.skills.items').map((s, i) => (
               <div key={s.title} className="skill-card reveal">
-                <span className="skill-icon">{s.icon}</span>
+                <span className="skill-icon">{SKILL_ICONS[i]}</span>
                 <h3>{s.title}</h3>
                 <p>{s.text}</p>
               </div>
@@ -156,19 +150,19 @@ export default function Home() {
       <section id="testimonials">
         <div className="test-inner">
           <div className="test-header reveal">
-            <p className="section-tag">Học viên nói gì</p>
-            <h2 className="section-title">Kết quả thật từ người thật</h2>
+            <p className="section-tag">{t('home.testimonials.tag')}</p>
+            <h2 className="section-title">{t('home.testimonials.title')}</h2>
           </div>
           <div className="test-grid">
-            {TESTIMONIALS.map((t) => (
-              <div key={t.name} className="test-card reveal">
+            {t('home.testimonials.items').map((item, i) => (
+              <div key={STUDENTS[i].name} className="test-card reveal">
                 <div className="test-stars">★★★★★</div>
-                <p className="test-text">{t.text}</p>
+                <p className="test-text">{item.text}</p>
                 <div className="test-author">
-                  <div className="test-avatar">{t.initials}</div>
+                  <div className="test-avatar">{STUDENTS[i].initials}</div>
                   <div>
-                    <div className="test-name">{t.name}</div>
-                    <div className="test-role">{t.role}</div>
+                    <div className="test-name">{STUDENTS[i].name}</div>
+                    <div className="test-role">{item.role}</div>
                   </div>
                 </div>
               </div>
@@ -181,18 +175,18 @@ export default function Home() {
       <section id="pricing">
         <div className="pricing-inner">
           <div className="pricing-header reveal">
-            <p className="section-tag">Học phí</p>
-            <h2 className="section-title">Chọn lộ trình phù hợp</h2>
+            <p className="section-tag">{t('home.pricing.tag')}</p>
+            <h2 className="section-title">{t('home.pricing.title')}</h2>
           </div>
           <div className="pricing-grid">
-            {PLANS.map((p) => (
-              <div key={p.name} className={`price-card reveal${p.featured ? ' featured' : ''}`}>
-                {p.featured && <div className="price-badge">Phổ biến nhất</div>}
+            {t('home.pricing.plans').map((p, i) => (
+              <div key={p.name} className={`price-card reveal${i === 0 ? ' featured' : ''}`}>
+                {i === 0 && <div className="price-badge">{t('home.pricing.popular')}</div>}
                 <h3 className="price-name">{p.name}</h3>
                 <ul className="price-features">
                   {p.features.map((f) => <li key={f}>{f}</li>)}
                 </ul>
-                <a href="#contact" className="price-btn price-btn-solid">Đăng ký ngay</a>
+                <a href="#contact" className="price-btn price-btn-solid">{t('home.pricing.cta')}</a>
               </div>
             ))}
           </div>
@@ -202,17 +196,17 @@ export default function Home() {
       {/* CONTACT */}
       <section id="contact">
         <div className="contact-inner">
-          <p className="section-tag reveal" style={{ textAlign: 'center' }}>Bắt đầu ngay hôm nay</p>
+          <p className="section-tag reveal" style={{ textAlign: 'center' }}>{t('home.contact.tag')}</p>
           <h2 className="contact-title reveal">
-            <span>Sẵn sàng</span>
-            <span style={{ color: 'var(--mint)' }}> lên sân</span>
-            <span> chưa?</span>
+            <span>{t('home.contact.title1')}</span>
+            <span style={{ color: 'var(--mint)' }}>{t('home.contact.title2')}</span>
+            <span>{t('home.contact.title3')}</span>
           </h2>
-          <p className="contact-sub reveal">Chỉ cần bạn mang vợt và tinh thần sẵn sàng thử thách bản thân.</p>
+          <p className="contact-sub reveal">{t('home.contact.sub')}</p>
           <div className="contact-btns reveal">
             <a href={CONTACT.zalo} target="_blank" rel="noreferrer" className="zalo-btn">
               <ZaloIcon />
-              <span>Nhắn Zalo ngay</span>
+              <span>{t('home.contact.zalo')}</span>
             </a>
             <a href={CONTACT.tel} className="phone-btn">📞 {CONTACT.phone}</a>
             <a href={CONTACT.tiktok} target="_blank" rel="noreferrer" className="tiktok-btn">
@@ -225,10 +219,10 @@ export default function Home() {
 
       <footer className="home-footer">
         <p>
-          © {new Date().getFullYear()} HLV Huỳnh Như · <Link to="/shop">Shop đồ cầu lông</Link>
+          © {new Date().getFullYear()} {t('home.footer.coach')} · <Link to="/shop">{t('home.footer.shop')}</Link>
           {' · '}<a href={CONTACT.tiktok} target="_blank" rel="noreferrer">TikTok {CONTACT.tiktokHandle}</a>
         </p>
-        <p><a href="#hero">Lên đầu trang ↑</a></p>
+        <p><a href="#hero">{t('home.footer.top')}</a></p>
       </footer>
     </div>
   )

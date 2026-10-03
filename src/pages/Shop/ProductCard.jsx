@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import ProductImage from '../../components/ProductImage'
-import { CATEGORIES, GENDERS } from '../../lib/config'
-import { discountPercent, formatPrice, formatUsd } from '../../lib/format'
+import { discountPercent } from '../../lib/format'
+import { useLang } from '../../i18n'
 import { useBuy } from './BuySheet'
 
 const TWO_WEEKS = 14 * 24 * 3600 * 1000
@@ -13,6 +13,9 @@ export function isNew(product) {
 
 export default function ProductCard({ product, index = 0 }) {
   const openBuy = useBuy()
+  const { t, price, money, pick } = useLang()
+  const name = pick(product, 'name')
+  const { main, alt } = price(product.price)
   const off = discountPercent(product.price, product.originalPrice)
   const soldOut = product.inStock === false
   const [img1, img2] = product.images || []
@@ -22,29 +25,29 @@ export default function ProductCard({ product, index = 0 }) {
       className={`s-card${soldOut ? ' is-out' : ''}`}
       style={{ animationDelay: `${Math.min(index, 11) * 40}ms` }}
     >
-      <Link to={`/shop/${product.id}`} className="s-card-link" aria-label={product.name}>
+      <Link to={`/shop/${product.id}`} className="s-card-link" aria-label={name}>
         <div className={`s-card-media${img2 ? ' has-alt' : ''}`}>
-          <ProductImage src={img1} alt={product.name} className="s-card-img" />
+          <ProductImage src={img1} alt={name} className="s-card-img" />
           {img2 && <ProductImage src={img2} alt="" className="s-card-img s-card-img-alt" />}
 
           <div className="s-card-tags">
             {off > 0 && <span className="s-tag s-tag-sale">−{off}%</span>}
-            {isNew(product) && <span className="s-tag s-tag-new">Mới</span>}
-            {soldOut && <span className="s-tag s-tag-out">Hết hàng</span>}
+            {isNew(product) && <span className="s-tag s-tag-new">{t('card.isNew')}</span>}
+            {soldOut && <span className="s-tag s-tag-out">{t('card.soldOut')}</span>}
           </div>
         </div>
 
         <div className="s-card-body">
           <p className="s-card-meta">
-            {CATEGORIES[product.category] || 'Sản phẩm'}
-            {product.gender && <><span className="s-dot" />{GENDERS[product.gender]}</>}
+            {product.category ? t(`category.${product.category}`) : t('card.product')}
+            {product.gender && <><span className="s-dot" />{t(`gender.${product.gender}`)}</>}
           </p>
-          <h3 className="s-card-name">{product.name}</h3>
+          <h3 className="s-card-name">{name}</h3>
           <div className="s-price">
-            <strong className={off > 0 ? 'is-sale' : ''}>{formatPrice(product.price)}</strong>
-            <span className="s-usd">{formatUsd(product.price)}</span>
+            <strong className={off > 0 ? 'is-sale' : ''}>{main}</strong>
+            <span className="s-alt">{alt}</span>
           </div>
-          {off > 0 && <s className="s-was">{formatPrice(product.originalPrice)}</s>}
+          {off > 0 && <s className="s-was">{money(product.originalPrice)}</s>}
           {product.sizes?.length > 0 && (
             <p className="s-card-sizes">{product.sizes.join(' · ')}</p>
           )}
@@ -58,7 +61,7 @@ export default function ProductCard({ product, index = 0 }) {
           disabled={soldOut}
           onClick={() => openBuy(product)}
         >
-          {soldOut ? 'Tạm hết hàng' : 'Mua ngay'}
+          {soldOut ? t('card.outOfStock') : t('card.buy')}
         </button>
       </div>
     </article>

@@ -146,11 +146,26 @@ a{color:inherit}
   .nav-links{display:none}
 }
 @media(max-width:420px){
-  .nav-logo{font-size:1.05rem}
-  .nav-right{gap:8px}
-  .nav-cta,.nav-shop{padding:7px 12px;font-size:.72rem;letter-spacing:.06em}
+  .site-nav,.site-nav.scrolled{padding-left:14px;padding-right:14px}
+  .nav-logo{font-size:1rem}
+  .nav-right{gap:6px}
+  .nav-cta,.nav-shop{padding:7px 10px;font-size:.7rem;letter-spacing:.05em}
+  .nav-shop svg{display:none}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .reveal{opacity:1;transform:none}
+}
+
+/* ── NÚT CHỌN NGÔN NGỮ (theme tối — trang giới thiệu) ── */
+.lang-switch{display:inline-flex;padding:3px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(11,22,36,.55);backdrop-filter:blur(8px)}
+.lang-switch button{
+  min-width:34px;padding:5px 9px;border-radius:999px;
+  font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--silver2);transition:background .2s,color .2s;
+}
+.lang-switch button:hover{color:var(--white)}
+.lang-switch button.active{background:var(--mint);color:var(--navy)}
+.not-found-lang{position:fixed;top:18px;right:18px}
+@media(max-width:420px){
+  .lang-switch button{min-width:28px;padding:4px 6px;font-size:.64rem}
 }

@@ -1,28 +1,25 @@
-import { GENDERS } from './config'
-import { formatPrice, formatUsd } from './format'
-
-export function orderMessage(product, size) {
+/** Nội dung tin nhắn đặt hàng, theo ngôn ngữ khách đang xem */
+export function orderMessage(product, size, { lang, t, price, pick }) {
   const url = `${window.location.origin}${import.meta.env.BASE_URL}shop/${product.id}`
+  const name = pick(product, 'name')
+  // Khách xem tiếng Anh → kèm tên tiếng Việt để shop dễ nhận ra sản phẩm
+  const fullName = lang === 'en' && name !== product.name ? `${name} — ${product.name}` : name
+  const { main, alt } = price(product.price)
   return [
-    'Chào shop, mình muốn đặt:',
-    `• ${product.name}${product.gender ? ` (${GENDERS[product.gender]})` : ''}`,
-    size ? `• Size: ${size}` : null,
-    `• Giá: ${formatPrice(product.price)} (~${formatUsd(product.price)})`,
+    t('order.greeting'),
+    `• ${fullName}${product.gender ? ` (${t(`gender.${product.gender}`)})` : ''}`,
+    size ? `• ${t('order.size')}: ${size}` : null,
+    `• ${t('order.price')}: ${main} (~${alt})`,
     `• Link: ${url}`,
   ].filter(Boolean).join('\n')
 }
 
 /**
- * Gắn vào onClick của link Zalo/TikTok (không preventDefault → link vẫn mở app).
- * Zalo/TikTok không hỗ trợ điền sẵn tin nhắn qua link, nên copy nội dung đặt hàng
- * vào clipboard để khách chỉ việc dán & gửi. Gọi clipboard ngay trong click
+ * Copy nội dung đặt hàng vào clipboard. Zalo/TikTok không hỗ trợ điền sẵn tin nhắn
+ * qua link, nên khách chỉ việc dán & gửi. Phải gọi ngay trong sự kiện click
  * (khi trang còn focus) thì trình duyệt mới cho phép.
  */
-export function copyOrderMessage(product, size, toast, channel = 'Zalo') {
-  const fallback = () => toast?.(`Nhắn ${channel} cho shop kèm tên sản phẩm để đặt hàng nhé!`, 'info')
-  if (!navigator.clipboard?.writeText) { fallback(); return }
-  navigator.clipboard.writeText(orderMessage(product, size)).then(
-    () => toast?.(`Đã copy thông tin sản phẩm — dán vào tin nhắn ${channel} để gửi cho shop nhé!`, 'info'),
-    fallback,
-  )
+export function copyText(text) {
+  if (!navigator.clipboard?.writeText) return Promise.reject(new Error('Clipboard không khả dụng'))
+  return navigator.clipboard.writeText(text)
 }

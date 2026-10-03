@@ -7,6 +7,7 @@ import ProductImage from '../../components/ProductImage'
 
 const EMPTY = {
   name: '',
+  nameEn: '',
   category: 'ao',
   gender: 'nam',
   price: '',
@@ -14,6 +15,7 @@ const EMPTY = {
   sizes: ['S', 'M', 'L', 'XL'],
   images: [],
   description: '',
+  descriptionEn: '',
   inStock: true,
 }
 
@@ -129,6 +131,11 @@ export default function ProductForm({ product, onClose, onSaved }) {
             <input value={form.name} onChange={(e) => set('name', e.target.value)} placeholder="VD: Áo thi đấu Yonex 2026" maxLength={200} autoFocus />
           </label>
 
+          <label className="field">
+            <span>Tên tiếng Anh (tuỳ chọn — hiện khi khách chọn EN)</span>
+            <input value={form.nameEn} onChange={(e) => set('nameEn', e.target.value)} placeholder="VD: Yonex 2026 Match Jersey" maxLength={200} />
+          </label>
+
           <div className="field-row">
             <label className="field">
               <span>Loại</span>
@@ -231,6 +238,11 @@ export default function ProductForm({ product, onClose, onSaved }) {
           <label className="field">
             <span>Mô tả</span>
             <textarea rows={4} value={form.description} onChange={(e) => set('description', e.target.value)} placeholder="Chất liệu, form dáng, hướng dẫn chọn size..." />
+          </label>
+
+          <label className="field">
+            <span>Mô tả tiếng Anh (tuỳ chọn)</span>
+            <textarea rows={3} value={form.descriptionEn} onChange={(e) => set('descriptionEn', e.target.value)} placeholder="Material, fit, sizing tips..." />
           </label>
 
           <label className="switch">

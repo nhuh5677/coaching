@@ -11,6 +11,10 @@ React (Vite) + Firebase (Firestore + Authentication), deploy lên GitHub Pages.
 
 > Nút **Mua ngay** mở bảng chọn kênh: **Zalo** (`0918887581`) hoặc **TikTok** (`@daycaulong_hn`), đồng thời tự copy sẵn nội dung đặt hàng (tên SP, size, giá, link) để khách dán vào tin nhắn rồi gửi.
 > Giá USD được quy đổi tự động từ giá VNĐ theo `USD_RATE`.
+>
+> **Đa ngôn ngữ (VI / EN):** nút chọn ngôn ngữ ở góc phải thanh menu. Mặc định tiếng Việt; khách bấm EN thì cả web chuyển sang tiếng Anh, **giá USD hiển thị chính** (VI thì VNĐ chính). Lựa chọn được ghi nhớ trên trình duyệt; có thể gửi link thẳng bản tiếng Anh bằng `?lang=en` (VD `.../shop?lang=en`).
+> Sửa câu chữ trên web: `src/i18n/vi.js` (tiếng Việt) và `src/i18n/en.js` (tiếng Anh).
+> Tên / mô tả sản phẩm tiếng Anh: nhập ở ô **"Tên tiếng Anh"**, **"Mô tả tiếng Anh"** trong form admin (bỏ trống thì hiện bản tiếng Việt).
 > Đổi số điện thoại, link TikTok, tỉ giá USD: sửa `src/lib/config.js`.
 
 ---
@@ -116,6 +120,7 @@ src/
   components/    SiteNav, Toast, Icons, ProductImage
   lib/
     config.js    SĐT Zalo, TikTok, tỉ giá USD, danh mục, size  ← sửa thông tin shop ở đây
+  i18n/          vi.js, en.js — toàn bộ câu chữ 2 ngôn ngữ; index.jsx — context đổi ngôn ngữ
     firebase.js  Khởi tạo Firebase
     products.js  Đọc/ghi Firestore
     images.js    Upload Cloudinary / nén ảnh
@@ -128,6 +133,7 @@ firestore.rules  Quy tắc bảo mật (dán vào Firebase Console)
 | Trường | Kiểu | Ví dụ |
 |---|---|---|
 | `name` | string | "Áo thi đấu Smash Pro" |
+| `nameEn` | string | "Smash Pro Match Jersey" (tuỳ chọn) |
 | `category` | `ao` \| `quan` \| `vay` \| `bo` \| `phukien` | "ao" |
 | `gender` | `nam` \| `nu` \| `unisex` | "nam" |
 | `price` | number | 189000 |
@@ -135,5 +141,6 @@ firestore.rules  Quy tắc bảo mật (dán vào Firebase Console)
 | `sizes` | string[] | ["S","M","L"] |
 | `images` | string[] | link ảnh, ảnh đầu là ảnh bìa |
 | `description` | string | |
+| `descriptionEn` | string | bản tiếng Anh (tuỳ chọn) |
 | `inStock` | boolean | true |
 | `createdAt`, `updatedAt` | timestamp | |

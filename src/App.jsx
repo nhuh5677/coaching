@@ -2,6 +2,8 @@ import { lazy, Suspense, useEffect } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home/Home'
 import { ToastProvider } from './components/Toast'
+import { useLang } from './i18n'
+import LangSwitch from './components/LangSwitch'
 
 // Shop & admin tải riêng để trang Home nhẹ hơn
 const Shop = lazy(() => import('./pages/Shop/Shop'))
@@ -15,20 +17,23 @@ function ScrollToTop() {
 }
 
 function PageLoader() {
+  const { t } = useLang()
   return (
     <div className="page-loader">
-      <span className="shuttle-spinner" aria-label="Đang tải" />
+      <span className="shuttle-spinner" aria-label={t('app.loading')} />
     </div>
   )
 }
 
 function NotFound() {
+  const { t } = useLang()
   return (
     <div className="not-found">
+      <LangSwitch className="not-found-lang" />
       <p className="section-tag">404</p>
-      <h1 className="section-title">Cầu ra ngoài sân rồi!</h1>
-      <p>Trang bạn tìm không tồn tại.</p>
-      <a className="btn-primary" href={import.meta.env.BASE_URL}>Về trang chủ</a>
+      <h1 className="section-title">{t('app.notFoundTitle')}</h1>
+      <p>{t('app.notFoundText')}</p>
+      <a className="btn-primary" href={import.meta.env.BASE_URL}>{t('app.backHome')}</a>
     </div>
   )
 }

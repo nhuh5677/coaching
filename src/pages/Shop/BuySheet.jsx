@@ -3,8 +3,8 @@ import ProductImage from '../../components/ProductImage'
 import { CloseIcon, TikTokIcon, ZaloIcon } from '../../components/Icons'
 import { useToast } from '../../components/Toast'
 import { CONTACT } from '../../lib/config'
-import { formatPrice, formatUsd } from '../../lib/format'
-import { copyOrderMessage } from '../../lib/buy'
+import { copyText, orderMessage } from '../../lib/buy'
+import { useLang } from '../../i18n'
 
 const BuyContext = createContext(() => {})
 
@@ -23,27 +23,26 @@ export function BuyProvider({ children }) {
 
 export const useBuy = () => useContext(BuyContext)
 
+// Thứ tự hiển thị: Zalo ở trên, TikTok ở dưới
 const CHANNELS = [
-  {
-    key: 'zalo',
-    name: 'Zalo',
-    title: 'Mua qua Zalo',
-    sub: `Chat Zalo ${CONTACT.phone}`,
-    href: CONTACT.zalo,
-    Icon: () => <ZaloIcon size={22} />,
-  },
-  {
-    key: 'tiktok',
-    name: 'TikTok',
-    title: 'Mua qua TikTok',
-    sub: `Nhắn tin ${CONTACT.tiktokHandle}`,
-    href: CONTACT.tiktok,
-    Icon: () => <TikTokIcon size={20} />,
-  },
+  { key: 'zalo', name: 'Zalo', href: CONTACT.zalo, vars: { phone: CONTACT.phone }, Icon: () => <ZaloIcon size={22} /> },
+  { key: 'tiktok', name: 'TikTok', href: CONTACT.tiktok, vars: { handle: CONTACT.tiktokHandle }, Icon: () => <TikTokIcon size={20} /> },
 ]
 
 function BuySheet({ product, size, onClose }) {
   const toast = useToast()
+  const i18n = useLang()
+  const { t, price, pick } = i18n
+  const { main, alt } = price(product.price)
+
+  const choose = (channel) => {
+    // Gọi ngay trong click để trình duyệt cho phép ghi clipboard
+    copyText(orderMessage(product, size, i18n)).then(
+      () => toast(t('sheet.copied', { channel }), 'info'),
+      () => toast(t('sheet.copyFailed', { channel }), 'info'),
+    )
+    onClose()
+  }
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose() }
@@ -61,8 +60,8 @@ function BuySheet({ product, size, onClose }) {
       <div className="s-sheet" role="dialog" aria-modal="true" aria-labelledby="buy-title">
         <div className="s-sheet-handle" aria-hidden="true" />
         <div className="s-sheet-head">
-          <div><p className="s-kicker">Đặt hàng</p><h2 id="buy-title">Chọn kênh liên hệ</h2></div>
-          <button type="button" className="s-sheet-close" onClick={onClose} aria-label="Đóng"><CloseIcon /></button>
+          <div><p className="s-kicker">{t('sheet.kicker')}</p><h2 id="buy-title">{t('sheet.title')}</h2></div>
+          <button type="button" className="s-sheet-close" onClick={onClose} aria-label={t('sheet.close')}><CloseIcon /></button>
         </div>
 
         <div className="s-sheet-product">
@@ -70,36 +69,36 @@ function BuySheet({ product, size, onClose }) {
             <ProductImage src={product.images?.[0]} alt="" />
           </div>
           <div className="s-sheet-info">
-            <p className="s-sheet-name">{product.name}</p>
+            <p className="s-sheet-name">{pick(product, 'name')}</p>
             <p className="s-sheet-meta">
-              {size && <span className="s-sheet-size">Size {size}</span>}
-              <b>{formatPrice(product.price)}</b>
-              <span className="s-usd">{formatUsd(product.price)}</span>
+              {size && <span className="s-sheet-size">{t('detail.sizeChosen', { size })}</span>}
+              <b>{main}</b>
+              <span className="s-alt">{alt}</span>
             </p>
           </div>
         </div>
 
         <div className="s-sheet-options">
-          {CHANNELS.map(({ key, name, title, sub, href, Icon }) => (
+          {CHANNELS.map(({ key, name, href, vars, Icon }) => (
             <a
               key={key}
               href={href}
               target="_blank"
               rel="noreferrer"
               className={`s-channel s-channel-${key}`}
-              onClick={() => { copyOrderMessage(product, size, toast, name); onClose() }}
+              onClick={() => choose(name)}
             >
               <span className="s-channel-icon"><Icon /></span>
               <span className="s-channel-text">
-                <b>{title}</b>
-                <small>{sub}</small>
+                <b>{t(`sheet.${key}Title`)}</b>
+                <small>{t(`sheet.${key}Sub`, vars)}</small>
               </span>
               <span className="s-channel-arrow" aria-hidden="true">→</span>
             </a>
           ))}
         </div>
 
-        <p className="s-sheet-note">Thông tin đơn hàng sẽ được sao chép tự động — bạn chỉ cần dán vào tin nhắn và gửi.</p>
+        <p className="s-sheet-note">{t('sheet.note')}</p>
       </div>
     </div>
   )

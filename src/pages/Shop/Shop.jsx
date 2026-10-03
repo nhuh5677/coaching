@@ -4,23 +4,14 @@ import ShopLayout from './ShopLayout'
 import ProductCard, { ProductCardSkeleton } from './ProductCard'
 import ProductImage from '../../components/ProductImage'
 import { SearchIcon, ShuttleArt } from '../../components/Icons'
-import { CATEGORIES, GENDERS } from '../../lib/config'
-import { formatPrice, formatUsd } from '../../lib/format'
+import { CATEGORIES } from '../../lib/config'
 import { useProducts } from '../../lib/useProducts'
+import { useLang } from '../../i18n'
 
-const SORTS = {
-  new: 'Mới nhất',
-  'price-asc': 'Giá thấp → cao',
-  'price-desc': 'Giá cao → thấp',
-}
-
-const VALUES = [
-  { title: 'Chất liệu thể thao', text: 'Thoáng khí, co giãn, nhanh khô' },
-  { title: 'Tư vấn size 1–1', text: 'Gửi chiều cao & cân nặng để được gợi ý' },
-  { title: 'Đặt hàng linh hoạt', text: 'Qua Zalo hoặc TikTok' },
-]
+const SORT_KEYS = ['new', 'price-asc', 'price-desc']
 
 function Hero({ products, onPick }) {
+  const { t, price, pick } = useLang()
   // Ưu tiên sản phẩm còn hàng & có ảnh để trưng bày
   const showcase = useMemo(() => {
     const ok = products.filter((p) => p.inStock !== false)
@@ -30,34 +21,34 @@ function Hero({ products, onPick }) {
   return (
     <section className="s-hero">
       <div className="s-hero-text">
-        <p className="s-kicker">Badminton Apparel · Đà Nẵng</p>
+        <p className="s-kicker">{t('shop.hero.kicker')}</p>
         <h1 className="s-hero-title">
-          Trang phục cầu lông có gu.<br />
-          <em>Mặc đẹp trên sân, chỉn chu ngoài đời.</em>
+          {t('shop.hero.title1')}<br />
+          <em>{t('shop.hero.title2')}</em>
         </h1>
-        <p className="s-hero-sub">
-          Những thiết kế được chọn lọc cho người chơi có gu — thoáng khí, co giãn,
-          đứng form trên sân và chỉn chu ngoài đời thường.
-        </p>
+        <p className="s-hero-sub">{t('shop.hero.sub')}</p>
         <div className="s-hero-ctas">
           <button type="button" className="s-btn s-btn-ink s-btn-lg" onClick={() => onPick('all')}>
-            Khám phá sản phẩm
+            {t('shop.hero.explore')}
           </button>
-          <button type="button" className="s-btn s-btn-ghost s-btn-lg" onClick={() => onPick('nam')}>Nam</button>
-          <button type="button" className="s-btn s-btn-ghost s-btn-lg" onClick={() => onPick('nu')}>Nữ</button>
+          <button type="button" className="s-btn s-btn-ghost s-btn-lg" onClick={() => onPick('nam')}>{t('gender.nam')}</button>
+          <button type="button" className="s-btn s-btn-ghost s-btn-lg" onClick={() => onPick('nu')}>{t('gender.nu')}</button>
         </div>
       </div>
 
       <div className={`s-hero-gallery n-${Math.max(showcase.length, 1)}`}>
-        {showcase.map((p, i) => (
-          <Link key={p.id} to={`/shop/${p.id}`} className={`s-hg-item s-hg-${i + 1}`}>
-            <ProductImage src={p.images?.[0]} alt={p.name} eager />
-            <span className="s-hg-caption">
-              <span>{p.name}</span>
-              <b>{formatPrice(p.price)} <i>{formatUsd(p.price)}</i></b>
-            </span>
-          </Link>
-        ))}
+        {showcase.map((p, i) => {
+          const { main, alt } = price(p.price)
+          return (
+            <Link key={p.id} to={`/shop/${p.id}`} className={`s-hg-item s-hg-${i + 1}`}>
+              <ProductImage src={p.images?.[0]} alt={pick(p, 'name')} eager />
+              <span className="s-hg-caption">
+                <span>{pick(p, 'name')}</span>
+                <b>{main} <i>{alt}</i></b>
+              </span>
+            </Link>
+          )
+        })}
       </div>
     </section>
   )
@@ -65,6 +56,7 @@ function Hero({ products, onPick }) {
 
 export default function Shop() {
   const { products, loading, error } = useProducts()
+  const { t } = useLang()
   // Bộ lọc lưu trên URL để chia sẻ link & giữ nguyên khi bấm Back
   const [params, setParams] = useSearchParams()
   const gender = params.get('gender') || 'all'
@@ -74,7 +66,7 @@ export default function Shop() {
   const [q, setQ] = useState(() => params.get('q') || '')
   const gridRef = useRef(null)
 
-  useEffect(() => { document.title = 'Huỳnh Như Badminton Store' }, [])
+  useEffect(() => { document.title = t('shop.docTitle') }, [t])
 
   const setParam = (key, value, fallback) => {
     const next = new URLSearchParams(params)
@@ -100,7 +92,7 @@ export default function Shop() {
     let list = products.filter((p) =>
       (gender === 'all' || p.gender === gender || p.gender === 'unisex')
       && (category === 'all' || p.category === category)
-      && (!term || p.name?.toLowerCase().includes(term)))
+      && (!term || p.name?.toLowerCase().includes(term) || p.nameEn?.toLowerCase().includes(term)))
     if (sort === 'price-asc') list = [...list].sort((a, b) => a.price - b.price)
     if (sort === 'price-desc') list = [...list].sort((a, b) => b.price - a.price)
     // Hàng còn trước, hết hàng xuống cuối
@@ -117,7 +109,7 @@ export default function Shop() {
       <Hero products={products} onPick={pickGender} />
 
       <ul className="s-values">
-        {VALUES.map((v, i) => (
+        {t('shop.values').map((v, i) => (
           <li key={v.title}>
             <span className="s-values-no">0{i + 1}</span>
             <div><b>{v.title}</b><span>{v.text}</span></div>
@@ -128,15 +120,17 @@ export default function Shop() {
       <section className="s-catalog" ref={gridRef}>
         <div className="s-catalog-head">
           <div>
-            <p className="s-kicker">Cửa hàng</p>
-            <h2 className="s-h2">{gender === 'nam' ? 'Đồ Nam' : gender === 'nu' ? 'Đồ Nữ' : 'Tất cả sản phẩm'}</h2>
+            <p className="s-kicker">{t('shop.catalog.kicker')}</p>
+            <h2 className="s-h2">{t(`shop.catalog.${gender === 'nam' ? 'men' : gender === 'nu' ? 'women' : 'all'}`)}</h2>
           </div>
-          {!loading && <p className="s-count">{filtered.length} sản phẩm</p>}
+          {!loading && (
+            <p className="s-count">{t(filtered.length === 1 ? 'shop.catalog.countOne' : 'shop.catalog.count', { n: filtered.length })}</p>
+          )}
         </div>
 
         <div className="s-toolbar">
-          <div className="s-seg" role="tablist" aria-label="Giới tính">
-            {[['all', 'Tất cả'], ['nam', 'Nam'], ['nu', 'Nữ']].map(([key, label]) => (
+          <div className="s-seg" role="tablist" aria-label={t('shop.catalog.genderLabel')}>
+            {['all', 'nam', 'nu'].map((key) => (
               <button
                 key={key}
                 type="button"
@@ -145,29 +139,29 @@ export default function Shop() {
                 className={`${gender === key ? 'active' : ''} seg-${key}`}
                 onClick={() => setParam('gender', key, 'all')}
               >
-                {label}
+                {t(`shop.catalog.tabs.${key}`)}
               </button>
             ))}
           </div>
 
           <label className="s-search">
             <SearchIcon />
-            <input type="search" placeholder="Tìm sản phẩm" value={q} onChange={(e) => setQ(e.target.value)} />
+            <input type="search" placeholder={t('shop.catalog.search')} value={q} onChange={(e) => setQ(e.target.value)} />
           </label>
 
-          <select className="s-sort" value={sort} onChange={(e) => setParam('sort', e.target.value, 'new')} aria-label="Sắp xếp">
-            {Object.entries(SORTS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+          <select className="s-sort" value={sort} onChange={(e) => setParam('sort', e.target.value, 'new')} aria-label={t('shop.catalog.sortLabel')}>
+            {SORT_KEYS.map((k) => <option key={k} value={k}>{t(`shop.catalog.sort.${k}`)}</option>)}
           </select>
         </div>
 
         {usedCategories.length > 1 && (
           <div className="s-cats">
             <button type="button" className={category === 'all' ? 'active' : ''} onClick={() => setParam('cat', 'all', 'all')}>
-              Tất cả
+              {t('shop.catalog.allCats')}
             </button>
             {usedCategories.map((c) => (
               <button key={c} type="button" className={category === c ? 'active' : ''} onClick={() => setParam('cat', c, 'all')}>
-                {CATEGORIES[c]}
+                {t(`category.${c}`)}
               </button>
             ))}
           </div>
@@ -175,7 +169,7 @@ export default function Shop() {
 
         {error ? (
           <div className="s-empty">
-            <p>Không tải được sản phẩm. Vui lòng thử lại sau.</p>
+            <p>{t('shop.catalog.error')}</p>
             <small>{error.message}</small>
           </div>
         ) : (
@@ -188,10 +182,10 @@ export default function Shop() {
             {!loading && filtered.length === 0 && (
               <div className="s-empty">
                 <ShuttleArt className="s-empty-art" />
-                <p>{products.length ? 'Không có sản phẩm phù hợp bộ lọc.' : 'Bộ sưu tập đang được cập nhật. Vui lòng quay lại sau.'}</p>
+                <p>{products.length ? t('shop.catalog.noMatch') : t('shop.catalog.empty')}</p>
                 {products.length > 0 && (
                   <button type="button" className="s-btn s-btn-outline" onClick={() => { setQ(''); setParams({}, { replace: true }) }}>
-                    Xoá bộ lọc
+                    {t('shop.catalog.clear')}
                   </button>
                 )}
               </div>
@@ -199,7 +193,7 @@ export default function Shop() {
           </>
         )}
         {!loading && gender !== 'all' && filtered.length > 0 && (
-          <p className="s-note">Đang hiện đồ {GENDERS[gender]} và Unisex.</p>
+          <p className="s-note">{t('shop.catalog.note', { gender: t(`gender.${gender}`) })}</p>
         )}
       </section>
     </ShopLayout>

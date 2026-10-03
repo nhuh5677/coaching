@@ -39,6 +39,7 @@ export function subscribeProduct(id, onData, onError) {
 function clean(data) {
   return {
     name: data.name.trim(),
+    nameEn: (data.nameEn || '').trim(),
     category: data.category,
     gender: data.gender,
     price: Number(data.price) || 0,
@@ -46,6 +47,7 @@ function clean(data) {
     sizes: data.sizes || [],
     images: data.images || [],
     description: (data.description || '').trim(),
+    descriptionEn: (data.descriptionEn || '').trim(),
     inStock: data.inStock !== false,
   }
 }
