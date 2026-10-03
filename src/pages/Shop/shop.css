@@ -333,10 +333,11 @@ body.theme-shop .toast-error{box-shadow:inset 3px 0 0 #E05A50,0 12px 30px rgba(0
 .s-channel-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex-shrink:0;color:#fff}
 .s-channel-zalo .s-channel-icon{background:#0068FF}
 .s-channel-tiktok .s-channel-icon{background:#000}
+.s-channel-facebook .s-channel-icon{background:#1877F2}
 .s-channel-tiktok .s-channel-icon svg{filter:drop-shadow(-1.2px -1px 0 #25F4EE) drop-shadow(1.2px 1px 0 #FE2C55)}
 .s-channel-text{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
 .s-channel-text b{font-size:.98rem;font-weight:600}
-.s-channel-text small{font-size:.8rem;color:var(--ink3)}
+.s-channel-text small{font-size:.8rem;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .s-channel-arrow{color:var(--ink3);transition:transform .25s var(--ease),color .2s}
 .s-channel:hover .s-channel-arrow{transform:translateX(4px);color:var(--ink)}
 .s-sheet-note{font-size:.78rem;color:var(--ink3);text-align:center;margin-top:18px;line-height:1.6}
@@ -462,3 +463,6 @@ body.theme-shop .toast-error{box-shadow:inset 3px 0 0 #E05A50,0 12px 30px rgba(0
   .s-nav-learn svg{display:none}
   .s-topbar{flex-wrap:nowrap;white-space:nowrap;overflow:hidden;font-size:.66rem;gap:8px}
 }
+
+/* Thanh thông tin trên cùng: ẩn bớt mục phụ khi màn hình hẹp */
+@media(max-width:900px){ .s-topbar .hide-md{display:none} }

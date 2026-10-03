@@ -63,7 +63,9 @@ export default function ShopLayout({ children }) {
           <span className="s-topbar-dot" aria-hidden="true" />
           <span>{t('shop.topbar.tiktok')} <a href={CONTACT.tiktok} target="_blank" rel="noreferrer">{CONTACT.tiktokHandle}</a></span>
           <span className="s-topbar-dot hide-sm" aria-hidden="true" />
-          <span className="hide-sm">{t('shop.topbar.advice')}</span>
+          <span className="hide-sm">Facebook <a href={CONTACT.facebook} target="_blank" rel="noreferrer">{CONTACT.facebookName}</a></span>
+          <span className="s-topbar-dot hide-md" aria-hidden="true" />
+          <span className="hide-md">{t('shop.topbar.advice')}</span>
         </div>
         <ShopNav />
         {!isFirebaseConfigured && (

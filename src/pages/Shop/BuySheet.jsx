@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import ProductImage from '../../components/ProductImage'
-import { CloseIcon, TikTokIcon, ZaloIcon } from '../../components/Icons'
+import { CloseIcon, FacebookIcon, TikTokIcon, ZaloIcon } from '../../components/Icons'
 import { useToast } from '../../components/Toast'
 import { CONTACT } from '../../lib/config'
 import { copyText, orderMessage } from '../../lib/buy'
@@ -23,10 +23,11 @@ export function BuyProvider({ children }) {
 
 export const useBuy = () => useContext(BuyContext)
 
-// Thứ tự hiển thị: Zalo ở trên, TikTok ở dưới
+// Thứ tự hiển thị: Zalo → TikTok → Facebook
 const CHANNELS = [
   { key: 'zalo', name: 'Zalo', href: CONTACT.zalo, vars: { phone: CONTACT.phone }, Icon: () => <ZaloIcon size={22} /> },
   { key: 'tiktok', name: 'TikTok', href: CONTACT.tiktok, vars: { handle: CONTACT.tiktokHandle }, Icon: () => <TikTokIcon size={20} /> },
+  { key: 'facebook', name: 'Facebook', href: CONTACT.facebook, vars: { name: CONTACT.facebookName }, Icon: () => <FacebookIcon size={22} /> },
 ]
 
 function BuySheet({ product, size, onClose }) {

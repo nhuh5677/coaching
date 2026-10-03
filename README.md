@@ -9,7 +9,7 @@ React (Vite) + Firebase (Firestore + Authentication), deploy lên GitHub Pages.
 | Chi tiết | `/shop/:id` | Ảnh, giá, chọn size, nút **Mua qua Zalo** |
 | Admin | `/admin` | Đăng nhập → thêm / sửa / xoá sản phẩm, bật tắt còn hàng |
 
-> Nút **Mua ngay** mở bảng chọn kênh: **Zalo** (`0918887581`) hoặc **TikTok** (`@daycaulong_hn`), đồng thời tự copy sẵn nội dung đặt hàng (tên SP, size, giá, link) để khách dán vào tin nhắn rồi gửi.
+> Nút **Mua ngay** mở bảng chọn kênh: **Zalo** (`0918887581`), **TikTok** (`@daycaulong_hn`) hoặc **Facebook** (Huỳnh Như Badminton Academy), đồng thời tự copy sẵn nội dung đặt hàng (tên SP, size, giá, link) để khách dán vào tin nhắn rồi gửi.
 > Giá USD được quy đổi tự động từ giá VNĐ theo `USD_RATE`.
 >
 > **Đa ngôn ngữ (VI / EN):** nút chọn ngôn ngữ ở góc phải thanh menu. Mặc định tiếng Việt; khách bấm EN thì cả web chuyển sang tiếng Anh, **giá USD hiển thị chính** (VI thì VNĐ chính). Lựa chọn được ghi nhớ trên trình duyệt; có thể gửi link thẳng bản tiếng Anh bằng `?lang=en` (VD `.../shop?lang=en`).
