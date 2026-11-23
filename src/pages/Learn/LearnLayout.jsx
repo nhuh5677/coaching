@@ -15,9 +15,15 @@ export default function LearnLayout({ done, children }) {
     const prev = meta?.getAttribute('content')
     const dark = window.matchMedia?.('(prefers-color-scheme: dark)').matches
     meta?.setAttribute('content', dark ? '#0E1B17' : '#EEF2EC')
+    // Trang riêng gửi cho học viên → không cho công cụ tìm kiếm index
+    const robots = document.createElement('meta')
+    robots.name = 'robots'
+    robots.content = 'noindex, nofollow'
+    document.head.appendChild(robots)
     return () => {
       document.body.classList.remove('theme-learn')
       if (prev) meta?.setAttribute('content', prev)
+      robots.remove()
     }
   }, [])
 

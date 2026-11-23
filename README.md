@@ -8,7 +8,7 @@ React (Vite) + Firebase (Firestore + Authentication), deploy lên GitHub Pages.
 | Shop | `/shop` | Lưới sản phẩm, lọc Nam/Nữ, loại, tìm kiếm, sắp xếp giá |
 | Chi tiết | `/shop/:id` | Ảnh, giá, chọn size, nút **Mua qua Zalo** |
 | Admin | `/admin` | Đăng nhập → thêm / sửa / xoá sản phẩm, bật tắt còn hàng |
-| Tài liệu học | `/hoc`, `/hoc/:id` | Lộ trình 24 bài (cơ bản + nâng cao): minh hoạ quỹ đạo cầu, công cụ tập bộ pháp, cầm vợt, đội hình đôi, tính điểm, đồng hồ bài tập, câu hỏi kiểm tra. Tiến độ lưu trên trình duyệt |
+| Tài liệu học (riêng) | `/hoc`, `/hoc/:id` | Lộ trình 24 bài (cơ bản + nâng cao): minh hoạ quỹ đạo cầu, công cụ tập bộ pháp, cầm vợt, đội hình đôi, tính điểm, đồng hồ bài tập, câu hỏi kiểm tra. Tiến độ lưu trên trình duyệt. **Không có nút nào trên site dẫn tới trang này** — HLV gửi link trực tiếp cho học viên; trang có `noindex` để Google không hiển thị |
 
 > Nút **Mua ngay** mở bảng chọn kênh: **Zalo** (`0918887581`), **TikTok** (`@daycaulong_hn`) hoặc **Facebook** (Huỳnh Như Badminton Academy), đồng thời tự copy sẵn nội dung đặt hàng (tên SP, size, giá, link) để khách dán vào tin nhắn rồi gửi.
 > Giá USD được quy đổi tự động từ giá VNĐ theo `USD_RATE`.

@@ -15,7 +15,7 @@ export default {
 
   home: {
     docTitle: 'Phan Võ Huỳnh Như — HLV Cầu Lông',
-    nav: { about: 'Về tôi', skills: 'Chương trình', testimonials: 'Học viên', pricing: 'Lộ trình học', learn: 'Tài liệu học', shop: 'Shop', signup: 'Đăng ký' },
+    nav: { about: 'Về tôi', skills: 'Chương trình', testimonials: 'Học viên', pricing: 'Lộ trình học', shop: 'Shop', signup: 'Đăng ký' },
     goTo: 'Tới mục {id}',
     hero: {
       eyebrow: 'HLV Cầu Lông · Đà Nẵng',
@@ -73,7 +73,7 @@ export default {
       sub: 'Chỉ cần bạn mang vợt và tinh thần sẵn sàng thử thách bản thân.',
       zalo: 'Nhắn Zalo ngay',
     },
-    footer: { coach: 'HLV Huỳnh Như', shop: 'Shop đồ cầu lông', learn: 'Tài liệu học cầu lông', top: 'Lên đầu trang ↑' },
+    footer: { coach: 'HLV Huỳnh Như', shop: 'Shop đồ cầu lông', top: 'Lên đầu trang ↑' },
   },
 
   shop: {
@@ -122,7 +122,6 @@ export default {
       men: 'Đồ Nam',
       women: 'Đồ Nữ',
       classes: 'Lớp học cầu lông',
-      learn: 'Tài liệu học cầu lông',
       place: 'Đà Nẵng, Việt Nam',
     },
   },

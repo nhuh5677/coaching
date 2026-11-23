@@ -15,7 +15,7 @@ export default {
 
   home: {
     docTitle: 'Phan Võ Huỳnh Như — Badminton Coach',
-    nav: { about: 'About', skills: 'Program', testimonials: 'Students', pricing: 'Courses', learn: 'Lessons', shop: 'Shop', signup: 'Sign up' },
+    nav: { about: 'About', skills: 'Program', testimonials: 'Students', pricing: 'Courses', shop: 'Shop', signup: 'Sign up' },
     goTo: 'Go to {id}',
     hero: {
       eyebrow: 'Badminton Coach · Da Nang',
@@ -73,7 +73,7 @@ export default {
       sub: 'Just bring your racket and the will to challenge yourself.',
       zalo: 'Message on Zalo',
     },
-    footer: { coach: 'Coach Huỳnh Như', shop: 'Badminton shop', learn: 'Free badminton lessons', top: 'Back to top ↑' },
+    footer: { coach: 'Coach Huỳnh Như', shop: 'Badminton shop', top: 'Back to top ↑' },
   },
 
   shop: {
@@ -122,7 +122,6 @@ export default {
       men: 'Men',
       women: 'Women',
       classes: 'Badminton classes',
-      learn: 'Free badminton lessons',
       place: 'Da Nang, Vietnam',
     },
   },
