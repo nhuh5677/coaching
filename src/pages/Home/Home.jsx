@@ -71,6 +71,7 @@ export default function Home() {
             <li><a href="#skills">{t('home.nav.skills')}</a></li>
             <li><a href="#testimonials">{t('home.nav.testimonials')}</a></li>
             <li><a href="#pricing">{t('home.nav.pricing')}</a></li>
+            <li><Link to="/hoc">{t('home.nav.learn')}</Link></li>
           </ul>
         )}
         right={(
@@ -224,6 +225,7 @@ export default function Home() {
       <footer className="home-footer">
         <p>
           © {new Date().getFullYear()} {t('home.footer.coach')} · <Link to="/shop">{t('home.footer.shop')}</Link>
+          {' · '}<Link to="/hoc">{t('home.footer.learn')}</Link>
           {' · '}<a href={CONTACT.tiktok} target="_blank" rel="noreferrer">TikTok {CONTACT.tiktokHandle}</a>
           {' · '}<a href={CONTACT.facebook} target="_blank" rel="noreferrer">Facebook</a>
         </p>

@@ -8,6 +8,7 @@ React (Vite) + Firebase (Firestore + Authentication), deploy lên GitHub Pages.
 | Shop | `/shop` | Lưới sản phẩm, lọc Nam/Nữ, loại, tìm kiếm, sắp xếp giá |
 | Chi tiết | `/shop/:id` | Ảnh, giá, chọn size, nút **Mua qua Zalo** |
 | Admin | `/admin` | Đăng nhập → thêm / sửa / xoá sản phẩm, bật tắt còn hàng |
+| Tài liệu học | `/hoc`, `/hoc/:id` | Lộ trình 24 bài (cơ bản + nâng cao): minh hoạ quỹ đạo cầu, công cụ tập bộ pháp, cầm vợt, đội hình đôi, tính điểm, đồng hồ bài tập, câu hỏi kiểm tra. Tiến độ lưu trên trình duyệt |
 
 > Nút **Mua ngay** mở bảng chọn kênh: **Zalo** (`0918887581`), **TikTok** (`@daycaulong_hn`) hoặc **Facebook** (Huỳnh Như Badminton Academy), đồng thời tự copy sẵn nội dung đặt hàng (tên SP, size, giá, link) để khách dán vào tin nhắn rồi gửi.
 > Giá USD được quy đổi tự động từ giá VNĐ theo `USD_RATE`.
@@ -15,6 +16,7 @@ React (Vite) + Firebase (Firestore + Authentication), deploy lên GitHub Pages.
 > **Đa ngôn ngữ (VI / EN):** nút chọn ngôn ngữ ở góc phải thanh menu. Mặc định tiếng Việt; khách bấm EN thì cả web chuyển sang tiếng Anh, **giá USD hiển thị chính** (VI thì VNĐ chính). Lựa chọn được ghi nhớ trên trình duyệt; có thể gửi link thẳng bản tiếng Anh bằng `?lang=en` (VD `.../shop?lang=en`).
 > Sửa câu chữ trên web: `src/i18n/vi.js` (tiếng Việt) và `src/i18n/en.js` (tiếng Anh).
 > Tên / mô tả sản phẩm tiếng Anh: nhập ở ô **"Tên tiếng Anh"**, **"Mô tả tiếng Anh"** trong form admin (bỏ trống thì hiện bản tiếng Việt).
+> Sửa nội dung bài học (các bước, lỗi hay gặp, bài tập, câu hỏi): `src/pages/Learn/lessons.js` — hiện chỉ có tiếng Việt.
 > Đổi số điện thoại, link TikTok, Facebook, tỉ giá USD: sửa `src/lib/config.js`.
 
 ---

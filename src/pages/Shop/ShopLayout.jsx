@@ -93,6 +93,7 @@ export default function ShopLayout({ children }) {
                 <Link to="/shop?gender=nam">{t('shop.footer.men')}</Link>
                 <Link to="/shop?gender=nu">{t('shop.footer.women')}</Link>
                 <Link to="/">{t('shop.footer.classes')}</Link>
+                <Link to="/hoc">{t('shop.footer.learn')}</Link>
               </div>
             </div>
           </div>

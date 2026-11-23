@@ -5,10 +5,12 @@ import { ToastProvider } from './components/Toast'
 import { useLang } from './i18n'
 import LangSwitch from './components/LangSwitch'
 
-// Shop & admin tải riêng để trang Home nhẹ hơn
+// Shop, admin & tài liệu học tải riêng để trang Home nhẹ hơn
 const Shop = lazy(() => import('./pages/Shop/Shop'))
 const ProductDetail = lazy(() => import('./pages/Shop/ProductDetail'))
 const Admin = lazy(() => import('./pages/Admin/Admin'))
+const Learn = lazy(() => import('./pages/Learn/Learn'))
+const Lesson = lazy(() => import('./pages/Learn/Lesson'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -47,6 +49,8 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/shop/:id" element={<ProductDetail />} />
+          <Route path="/hoc" element={<Learn />} />
+          <Route path="/hoc/:id" element={<Lesson />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
